@@ -19,7 +19,7 @@ const getExpandState = (expand: boolean) => {
     : css``;
 };
 
-const ImageBox = styled.img.attrs((props) => ({
+const ImageBox = styled.img.attrs<ImageProps>((props) => ({
   src: props.src,
   alt: props.alt,
 }))<StyledImageProps>`
