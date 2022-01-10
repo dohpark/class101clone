@@ -75,9 +75,16 @@ const IconButton: React.FC<IconButtonProps> = ({
   size = "sm",
   iconName,
   fillColor,
+  onClick,
+  className,
 }) => {
   return (
-    <IconButtonBox backgroundColor={backgroundColor} size={size}>
+    <IconButtonBox
+      backgroundColor={backgroundColor}
+      size={size}
+      onClick={onClick}
+      className={className}
+    >
       <Icon size={18} iconName={iconName} fillColor={fillColor} />
     </IconButtonBox>
   );
