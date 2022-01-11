@@ -50,9 +50,15 @@ const Badge: React.FC<BadgeProps> = ({
   size,
   backgroundColor,
   color,
+  className,
 }) => {
   return (
-    <TagBox size={size} backgroundColor={backgroundColor} color={color}>
+    <TagBox
+      size={size}
+      backgroundColor={backgroundColor}
+      color={color}
+      className={className}
+    >
       {children}
     </TagBox>
   );
