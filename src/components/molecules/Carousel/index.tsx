@@ -76,7 +76,7 @@ const SlideProps = styled.section<StyledSlideProps>`
   transition: transform 0.5s ease-in-out;
   position: relative;
 
-  div {
+  > div {
     ${(props) => SlidesViewWidth(props.slidesView, props.count)};
     margin: 0 20px 0 0;
     border-radius: 20px;
