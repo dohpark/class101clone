@@ -55,13 +55,13 @@ const getNavPosition = (navPosition: "rightIn" | "eachSide") => {
 
 const EachSideContainer = styled.div<StyledButtonProps>`
   margin: auto;
-  width: 90%;
+  width: 100%;
   ${(props) =>
     props.navPosition === "eachSide" && getNavPosition(props.navPosition)};
 `;
 
 const CarouselContainer = styled.div`
-  width: 90%;
+  width: 100%;
   overflow: hidden;
   position: relative;
   margin: auto;
