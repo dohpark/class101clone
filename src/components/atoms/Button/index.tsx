@@ -7,7 +7,7 @@ const getButtonBackgroundColor = (color: string) => {
       return css`
         background-color: ${palette.orange500};
       `;
-    case "orangeLigt":
+    case "orangeLight":
       return css`
         background-color: ${palette.orange100};
       `;
@@ -24,7 +24,7 @@ const getButtonColor = (color: string) => {
       return css`
         color: ${palette.orange500};
       `;
-    case "orangeLigt":
+    case "orangeLight":
       return css`
         color: ${palette.orange100};
       `;
@@ -39,10 +39,9 @@ const getButtonSize = (size: "md") => {
   switch (size) {
     case "md":
       return css`
-        height: 40px;
         font-size: 18px;
         font-weight: 500;
-        padding: 0 16px;
+        padding: 16px;
       `;
   }
 };
@@ -79,9 +78,15 @@ const Button: React.FC<ButtonProps> = ({
   backgroundColor = "default",
   color = "default",
   size = "md",
+  className,
 }) => {
   return (
-    <ButtonBox backgroundColor={backgroundColor} color={color} size={size}>
+    <ButtonBox
+      backgroundColor={backgroundColor}
+      color={color}
+      size={size}
+      className={className}
+    >
       {children}
     </ButtonBox>
   );
