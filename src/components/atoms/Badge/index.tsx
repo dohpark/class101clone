@@ -21,19 +21,19 @@ const getBadgeSize = (size: string) => {
       return css`
         font-size: 9px;
         min-width: 16px;
-        padding: 0 4 0;
+        padding: 4;
       `;
     case "sm":
       return css`
         font-size: 9px;
         min-width: 20px;
-        padding: 0 6 0;
+        padding: 6;
       `;
     case "md":
       return css`
         font-size: 11px;
         min-width: 24px;
-        padding: 0 6 0;
+        padding: 6;
       `;
   }
 };
