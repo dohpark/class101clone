@@ -9,7 +9,8 @@ type iconName =
   | "Bell"
   | "Search"
   | "Logo"
-  | "Menu";
+  | "Menu"
+  | "Clock";
 
 type icon = {
   path: string;
@@ -59,6 +60,10 @@ const IconSet: Record<iconName, icon> = {
   },
   Menu: {
     path: "M24 6h-24v-4h24v4zm0 4h-24v4h24v-4zm0 8h-24v4h24v-4z",
+    viewBox: "0 0 24 24",
+  },
+  Clock: {
+    path: "M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm1 12v-6h-2v8h7v-2h-5z",
     viewBox: "0 0 24 24",
   },
 };
