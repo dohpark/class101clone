@@ -11,6 +11,10 @@ const getButtonColor = (color: string) => {
       return css`
         color: ${palette.orange100};
       `;
+    case "black":
+      return css`
+        color: ${palette.black};
+      `;
     default:
       return css`
         color: ${palette.gray600};
@@ -34,7 +38,7 @@ const getButtonSize = (size: "md" | "lg") => {
 };
 
 interface StyledTextButtonProps {
-  color: "default" | "orange" | "orangeLight";
+  color: "default" | "orange" | "orangeLight" | "black";
   size: "md" | "lg";
 }
 
@@ -61,7 +65,7 @@ const TextButtonSpan = styled.span``;
 interface TextButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
-  color?: "default" | "orange" | "orangeLight";
+  color?: "default" | "orange" | "orangeLight" | "black";
   size?: "md" | "lg";
 }
 
