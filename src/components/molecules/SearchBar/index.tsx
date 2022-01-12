@@ -1,6 +1,8 @@
+import React, { useState } from "react";
 import styled from "styled-components";
 import palette from "../../../styles/palette";
 import IconButton from "../../atoms/IconButton";
+import SearchBarModal from "../../organisms/SearchBarModal";
 
 const SearchBarForm = styled.form`
   width: 100%;
@@ -26,13 +28,30 @@ const SearchBarInput = styled.input`
 
 interface SearchBarProps {
   placeholder: string;
+  modal: boolean;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ placeholder }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ placeholder, modal }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const openModal = () => {
+    console.log(isOpen);
+    setIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
   return (
     <SearchBarForm action="#">
-      <SearchBarInput type="search" placeholder={placeholder}></SearchBarInput>
+      <SearchBarInput
+        type="search"
+        placeholder={placeholder}
+        onClick={openModal}
+      ></SearchBarInput>
       <IconButton iconName="Search" fillColor="black" className="searchIcon" />
+      {modal && <SearchBarModal isOpen={isOpen} closeModal={closeModal} />}
     </SearchBarForm>
   );
 };
