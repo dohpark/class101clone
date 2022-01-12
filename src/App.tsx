@@ -3,11 +3,13 @@ import Carousel from "./components/molecules/Carousel";
 import { timeDeal, popularEvent, mdRecommend, openSoon } from "./data/data";
 import Section from "./components/organisms/Section";
 import Header from "./components/organisms/Header";
+import Nav from "./components/organisms/Nav";
 
 function App() {
   return (
     <div className="App">
       <Header />
+      <Nav />
       <Section title={"오늘의 특가! TIME DEAL"} button={true}>
         <Carousel slidesView={4} navPosition="eachSide" iconColor="black">
           {timeDeal.time_deal.map(
