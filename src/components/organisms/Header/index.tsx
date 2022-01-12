@@ -85,7 +85,7 @@ const Header = () => {
         <Button className="store">스토어</Button>
       </ClassStoreWrapper>
       <SearchWrapper>
-        <SearchBar placeholder={"찾으시는 취미가 있으신가요?"} />
+        <SearchBar placeholder={"찾으시는 취미가 있으신가요?"} modal={true} />
       </SearchWrapper>
       <ButtonWrapper>
         <div className="space"></div>
