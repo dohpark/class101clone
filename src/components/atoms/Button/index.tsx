@@ -53,9 +53,6 @@ interface StyledButtonProps {
 }
 
 const ButtonBox = styled.button<StyledButtonProps>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
   width: 100%;
   border: 0;
   border-radius: 3px;
@@ -79,6 +76,7 @@ const Button: React.FC<ButtonProps> = ({
   color = "default",
   size = "md",
   className,
+  onClick,
 }) => {
   return (
     <ButtonBox
@@ -86,6 +84,7 @@ const Button: React.FC<ButtonProps> = ({
       color={color}
       size={size}
       className={className}
+      onClick={onClick}
     >
       {children}
     </ButtonBox>
