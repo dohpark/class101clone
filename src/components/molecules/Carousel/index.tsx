@@ -75,6 +75,7 @@ const SlideProps = styled.section<StyledSlideProps>`
   transform: translateX(0);
   transition: transform 0.5s ease-in-out;
   position: relative;
+  z-index: 0;
 
   > div {
     ${(props) => SlidesViewWidth(props.slidesView, props.count)};
