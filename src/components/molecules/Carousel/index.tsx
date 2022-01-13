@@ -1,7 +1,13 @@
-import React, { Children, useEffect } from "react";
+import React, {
+  Children,
+  cloneElement,
+  isValidElement,
+  useEffect,
+} from "react";
 import { useState, useRef } from "react";
 import styled, { css } from "styled-components";
 import IconButton from "../../atoms/IconButton";
+import Pagination from "../Pagination";
 
 interface StyledSlideProps {
   slidesView: number;
@@ -33,6 +39,17 @@ const getNavPosition = (navPosition: "rightIn" | "eachSide") => {
         left: 85%;
         width: 100%;
         z-index: 1;
+
+        .leftButton {
+          margin: 0;
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+        }
+        .rightButton {
+          margin: 0;
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+        }
       `;
     case "eachSide":
       return css`
@@ -41,13 +58,22 @@ const getNavPosition = (navPosition: "rightIn" | "eachSide") => {
           position: absolute;
           z-index: 1;
           top: 40%;
+          left: -5%;
+
+          &:disabled {
+            background-color: transparent;
+          }
         }
 
         .rightButton {
           position: absolute;
           z-index: 1;
-          right: 0%;
+          right: -5%;
           top: 40%;
+
+          &:disabled {
+            background-color: transparent;
+          }
         }
       `;
   }
@@ -67,6 +93,13 @@ const CarouselContainer = styled.div`
   margin: auto;
   display: flex;
   align-items: center;
+
+  .circle {
+    display: absolute;
+    bottom: 10%;
+    left: 46%;
+    z-index: 333;
+  }
 `;
 
 const SlideProps = styled.section<StyledSlideProps>`
@@ -80,7 +113,6 @@ const SlideProps = styled.section<StyledSlideProps>`
   > div {
     ${(props) => SlidesViewWidth(props.slidesView, props.count)};
     margin: 0 20px 0 0;
-    border-radius: 20px;
     position: relative;
     left: 0;
     transition: 0.5s;
@@ -91,40 +123,73 @@ const ButtonProps = styled.div<StyledButtonProps>`
   ${(props) => getNavPosition(props.navPosition)};
 `;
 
-const PaginationProps = styled.div``;
-
 interface CarouselProps extends React.HTMLAttributes<HTMLDivElement> {
   slidesView: number;
   navPosition: "rightIn" | "eachSide";
-  pagination?: boolean;
+  paginationType?: "circle" | "number";
   autoplay?: boolean;
-  maxWidth?: boolean;
   children: React.ReactNode;
+  iconBackgroundColor?: "black" | "white" | "transparent";
   iconColor?: "black" | "white";
 }
 
 const Carousel: React.FC<CarouselProps> = ({
   slidesView,
   navPosition,
-  pagination,
-  autoplay,
-  maxWidth,
+  paginationType,
+  autoplay = false,
+  iconBackgroundColor = "transparent",
   iconColor = "black",
   children,
 }) => {
-  const [active, setActive] = useState(0);
-  const slideRef = useRef<HTMLDivElement>(null);
   const count = Children.count(children);
+  let paginationActive: boolean;
 
+  if (paginationType === "circle") paginationActive = true;
+  else paginationActive = false;
+
+  // button disabled
+  const leftButtonDisabled = () => {
+    if (autoplay) return false;
+    if (active === 0) return true;
+  };
+  const rightButtonDisabled = () => {
+    if (autoplay) return false;
+    if (active === count - slidesView) return true;
+  };
+
+  // click event
   const onClickLeft = (event: React.MouseEvent<HTMLElement>) => {
-    if (active === 0) return;
-    setActive(active - 1);
+    if (autoplay) {
+      setActive(active - 1);
+      if (active <= 0) {
+        setActive(count - slidesView);
+      }
+    } else {
+      if (active === 0) return;
+      setActive(active - 1);
+    }
   };
   const onClickRight = (event: React.MouseEvent<HTMLElement>) => {
-    if (count < slidesView) return;
-    if (active === count - slidesView) return;
-    setActive(active + 1);
+    if (autoplay) {
+      setActive(active + 1);
+      if (active > count - slidesView - 1) {
+        setActive(0);
+      }
+    } else {
+      if (count < slidesView) return;
+      if (active === count - slidesView) return;
+      setActive(active + 1);
+    }
   };
+
+  const onClickPaginationHandler = (index: number) => {
+    setActive(index);
+  };
+
+  // swipe effect
+  const [active, setActive] = useState(0);
+  const slideRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const { current } = slideRef;
@@ -135,6 +200,32 @@ const Carousel: React.FC<CarouselProps> = ({
     }
   }, [active, slidesView]);
 
+  // autoplay
+  useEffect(() => {
+    const id = setInterval(() => {
+      if (autoplay) {
+        setActive(active + 1);
+        if (active > count - slidesView - 1) {
+          setActive(0);
+        }
+      }
+    }, 5 * 1000);
+    return () => clearInterval(id);
+  }, [active]);
+
+  // children clone
+  const childrenWithProps = Children.map(children, (child) => {
+    if (isValidElement(child)) {
+      return cloneElement(child, {
+        slidesView,
+        active,
+        count,
+        onClickPaginationHandler,
+      });
+    }
+    return child;
+  });
+
   return (
     <EachSideContainer navPosition={navPosition}>
       {navPosition === "eachSide" && (
@@ -142,7 +233,9 @@ const Carousel: React.FC<CarouselProps> = ({
           className="leftButton"
           iconName="ChevronLeft"
           fillColor={iconColor}
+          backgroundColor={iconBackgroundColor}
           onClick={onClickLeft}
+          disabled={leftButtonDisabled()}
         />
       )}
       {navPosition === "eachSide" && (
@@ -150,28 +243,45 @@ const Carousel: React.FC<CarouselProps> = ({
           className="rightButton"
           iconName="ChevronRight"
           fillColor={iconColor}
+          backgroundColor={iconBackgroundColor}
           onClick={onClickRight}
+          disabled={rightButtonDisabled()}
         />
       )}
       <CarouselContainer>
         <SlideProps slidesView={slidesView} count={count} ref={slideRef}>
-          {children}
+          {childrenWithProps}
         </SlideProps>
         {navPosition !== "eachSide" && (
           <ButtonProps navPosition={navPosition}>
             <IconButton
+              className="leftButton"
               iconName="ChevronLeft"
               fillColor={iconColor}
+              backgroundColor={iconBackgroundColor}
               onClick={onClickLeft}
+              disabled={leftButtonDisabled()}
             />
             <IconButton
+              className="rightButton"
               iconName="ChevronRight"
               fillColor={iconColor}
+              backgroundColor={iconBackgroundColor}
               onClick={onClickRight}
+              disabled={rightButtonDisabled()}
             />
           </ButtonProps>
         )}
-        {pagination && <PaginationProps></PaginationProps>}
+        {paginationActive && (
+          <Pagination
+            className="circle"
+            paginationType={paginationType}
+            slidesPerView={slidesView}
+            active={active}
+            childrenCount={count}
+            onClickPaginationHandler={onClickPaginationHandler}
+          />
+        )}
       </CarouselContainer>
     </EachSideContainer>
   );
