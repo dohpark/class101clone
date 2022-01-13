@@ -4,6 +4,9 @@ import TextButton from "../../atoms/TextButton";
 
 const SectionContainer = styled.div`
   margin-top: 72px;
+  max-width: 1176px;
+  margin-left: auto;
+  margin-right: auto;
 `;
 
 const Header = styled.div`
