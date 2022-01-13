@@ -41,7 +41,6 @@ const getButtonSize = (size: "md") => {
       return css`
         font-size: 18px;
         font-weight: 500;
-        padding: 16px;
       `;
   }
 };

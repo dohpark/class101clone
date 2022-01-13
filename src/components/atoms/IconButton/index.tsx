@@ -16,6 +16,7 @@ const getButtonBackgroundColor = (color: string) => {
   switch (color) {
     case "white":
       return css`
+        border: 0.5px solid ${palette.gray300};
         background-color: ${palette.white};
       `;
     case "black":
@@ -56,10 +57,13 @@ const IconButtonBox = styled.button<StyledIconButtonProps>`
   outline: none;
   cursor: pointer;
   ${(props) => getButtonSize(props.size)};
-  ${(props) => getButtonBackgroundColor(props.backgroundColor)}
+  ${(props) => getButtonBackgroundColor(props.backgroundColor)};
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    filter: brightness(90%);
   }
 `;
 
