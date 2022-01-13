@@ -72,17 +72,28 @@ interface IconProp {
   iconName: iconName;
   fillColor?: string;
   size: number;
+  disabled?: boolean;
 }
 
-const Icon = ({ fillColor = "#b86969", size = 100, iconName }: IconProp) => (
-  <svg
-    height={size}
-    viewBox={IconSet[iconName].viewBox}
-    fill={fillColor}
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path d={IconSet[iconName].path} />
-  </svg>
-);
+const Icon = ({
+  fillColor = "#000000",
+  size = 10,
+  iconName,
+  disabled = false,
+}: IconProp) => {
+  if (disabled) {
+    fillColor = "#d3d3d3";
+  }
+  return (
+    <svg
+      height={size}
+      viewBox={IconSet[iconName].viewBox}
+      fill={fillColor}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d={IconSet[iconName].path} />
+    </svg>
+  );
+};
 
 export default Icon;

@@ -65,6 +65,12 @@ const IconButtonBox = styled.button<StyledIconButtonProps>`
   &:hover {
     filter: brightness(90%);
   }
+
+  &:disabled {
+    cursor: not-allowed;
+    background-color: ${palette.gray000};
+    filter: brightness(90%);
+  }
 `;
 
 interface IconButtonProps
@@ -82,6 +88,7 @@ const IconButton: React.FC<IconButtonProps> = ({
   fillColor,
   onClick,
   className,
+  disabled,
 }) => {
   return (
     <IconButtonBox
@@ -89,8 +96,14 @@ const IconButton: React.FC<IconButtonProps> = ({
       size={size}
       onClick={onClick}
       className={className}
+      disabled={disabled}
     >
-      <Icon size={18} iconName={iconName} fillColor={fillColor} />
+      <Icon
+        size={18}
+        iconName={iconName}
+        fillColor={fillColor}
+        disabled={disabled}
+      />
     </IconButtonBox>
   );
 };

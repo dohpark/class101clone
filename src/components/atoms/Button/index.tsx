@@ -76,6 +76,7 @@ const Button: React.FC<ButtonProps> = ({
   size = "md",
   className,
   onClick,
+  disabled,
 }) => {
   return (
     <ButtonBox
@@ -84,6 +85,7 @@ const Button: React.FC<ButtonProps> = ({
       size={size}
       className={className}
       onClick={onClick}
+      disabled={disabled}
     >
       {children}
     </ButtonBox>
