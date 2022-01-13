@@ -26,8 +26,8 @@ const ImageBox = styled.img.attrs<ImageProps>((props) => ({
   max-width: 100%;
   transition: all 0.3s;
   display: block;
-  max-width: 100%;
-  max-height: 100%;
+  width: 100%;
+  height: 100%;
   transform: scale(1);
 
   &:hover {
