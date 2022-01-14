@@ -18,13 +18,16 @@ const PaginationNumber = styled.div`
   }
 
   .bar {
-    margin-left: 3px;
-    margin-right: 0;
+    margin-left: 0px;
+    margin-right: 0px;
     font-weight: 300;
+    padding: 0;
   }
 
   .lastPage {
-    margin-left: 3px;
+    padding: 0;
+    margin-left: 0px;
+    margin-right: 0px;
   }
 `;
 

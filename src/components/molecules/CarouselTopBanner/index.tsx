@@ -95,11 +95,6 @@ const PBRWrapper = styled.div`
     margin-right: 8px;
   }
 
-  .bar {
-    width: 70%;
-    margin-right: 8px;
-  }
-
   .rightButton {
     margin-right: 20px;
   }
@@ -175,7 +170,7 @@ const CarouselTopBanner: React.FC<BannerProps> = ({ array }) => {
       current.style.transform = `translateX(calc(-${width}px))`;
       resetAnimation();
     }
-  }, [page, resetAnimation]);
+  }, [page]);
 
   // autoplay
   useEffect(() => {
@@ -192,7 +187,7 @@ const CarouselTopBanner: React.FC<BannerProps> = ({ array }) => {
           <ImageCarouselContainer>
             <SlideProps ref={slideRef}>
               {imgsrcTitle.map((val) => (
-                <ImageContainer>
+                <ImageContainer key={val[1]}>
                   {val[2] !== "" && (
                     <Badge size="md" className="badge" backgroundColor="red">
                       {val[2]}
@@ -218,7 +213,7 @@ const CarouselTopBanner: React.FC<BannerProps> = ({ array }) => {
                   childrenCount={lastIndex + 1}
                   onClickPaginationHandler={() => {}}
                 />
-                <ProgressBar className="bar" />
+                <ProgressBar className="progressBar" />
                 <IconButton
                   className="leftButton"
                   iconName="ChevronLeft"
