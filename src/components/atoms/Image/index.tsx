@@ -23,7 +23,6 @@ const ImageBox = styled.img.attrs<ImageProps>((props) => ({
   src: props.src,
   alt: props.alt,
 }))<StyledImageProps>`
-  max-width: 100%;
   transition: all 0.3s;
   display: block;
   width: 100%;
