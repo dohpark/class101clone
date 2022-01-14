@@ -13,8 +13,7 @@ import Section from "./components/organisms/Section";
 import Header from "./components/organisms/Header";
 import Nav from "./components/organisms/Nav";
 import Banner from "./components/molecules/Banner";
-import ProgressBar from "./components/atoms/ProgressBar";
-import BannerLarge from "./components/molecules/Banner copy";
+import CarouselTopBanner from "./components/molecules/CarouselTopBanner";
 
 const BannerContainer = styled.div`
   margin-top: 72px;
@@ -25,39 +24,7 @@ function App() {
     <div className="App">
       <Header />
       <Nav />
-      <BannerLarge
-        title={"hello"}
-        subtitle={"subtitle"}
-        img={
-          "https://images.velog.io/images/kados22/post/0e43ee9f-3ecf-46af-9885-b70a5a78ed2e/%E1%84%8B%E1%85%B5%E1%86%AF%E1%84%87%E1%85%A1%E1%86%AB%20Class%20Card%20%E1%84%8A%E1%85%A5%E1%86%B7%E1%84%82%E1%85%A6%E1%84%8B%E1%85%B5%E1%86%AF%203.png"
-        }
-        bgColor="red"
-        type="top"
-      ></BannerLarge>
-      <BannerContainer>
-        <Carousel
-          slidesView={1}
-          navPosition="rightIn"
-          iconColor="black"
-          iconBackgroundColor="transparent"
-          paginationType="number"
-          autoplay={true}
-        >
-          {topEvent.top_event.map(
-            ({ id, title, subtitle, img, bgColor, badge }) => (
-              <Banner
-                type="top"
-                key={id}
-                title={title}
-                subtitle={subtitle}
-                img={img}
-                bgColor={bgColor}
-                badge={badge}
-              />
-            )
-          )}
-        </Carousel>
-      </BannerContainer>
+      <CarouselTopBanner array={topEvent.top_event} />
       <Section title={"오늘의 특가! TIME DEAL"} button={true}>
         <Carousel slidesView={4} navPosition="eachSide" iconColor="black">
           {timeDeal.time_deal.map(
@@ -107,7 +74,6 @@ function App() {
           {bottomEvent.bottom_event.map(
             ({ id, title, subtitle, img, bgColor }) => (
               <Banner
-                type="bottom"
                 key={id}
                 title={title}
                 subtitle={subtitle}
