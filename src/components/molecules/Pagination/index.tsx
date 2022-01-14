@@ -19,6 +19,7 @@ const PaginationNumber = styled.div`
 
   .bar {
     margin-left: 3px;
+    margin-right: 0;
     font-weight: 300;
   }
 
@@ -55,7 +56,7 @@ interface PaginationProps extends React.HTMLAttributes<HTMLDivElement> {
   active: number;
   slidesPerView: number;
   childrenCount: number;
-  onClickPaginationHandler: (index: number) => void;
+  onClickPaginationHandler?: (index: number) => void;
 }
 
 const Pagination: React.FC<PaginationProps> = ({
@@ -63,7 +64,7 @@ const Pagination: React.FC<PaginationProps> = ({
   active,
   slidesPerView,
   childrenCount,
-  onClickPaginationHandler,
+  onClickPaginationHandler = () => {},
   className,
 }) => {
   const pages = childrenCount - slidesPerView + 1;
