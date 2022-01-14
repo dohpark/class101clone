@@ -74,9 +74,15 @@ const TextButton: React.FC<TextButtonProps> = ({
   color = "default",
   size = "md",
   className,
+  onClick,
 }) => {
   return (
-    <TextButtonBox color={color} size={size} className={className}>
+    <TextButtonBox
+      color={color}
+      size={size}
+      className={className}
+      onClick={onClick}
+    >
       <TextButtonSpan>{children}</TextButtonSpan>
     </TextButtonBox>
   );

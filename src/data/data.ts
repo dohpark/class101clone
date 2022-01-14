@@ -518,4 +518,41 @@ const bottomEvent = {
   ],
 };
 
-export { timeDeal, mdRecommend, openSoon, popularEvent, topEvent, bottomEvent };
+const recommendSearch = {
+  recommend_search: [
+    "오늘의 특가",
+    "새해 인기취미",
+    "태블릿 최저가",
+    "새해 인기 클래스",
+    "재테크 시작",
+    "N잡러 준비",
+    "일잘러의 비법",
+    "요즘 외국어 공부",
+  ],
+};
+
+const popularSearchTerm = {
+  popular_search_term: [
+    "아이패드",
+    "이모티콘",
+    "일러스트",
+    "베이킹",
+    "포토샵",
+    "드로잉",
+    "그림",
+    "가죽공예",
+    "주식",
+    "자수",
+  ],
+};
+
+export {
+  timeDeal,
+  mdRecommend,
+  openSoon,
+  popularEvent,
+  topEvent,
+  bottomEvent,
+  recommendSearch,
+  popularSearchTerm,
+};

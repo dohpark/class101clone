@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
 import palette from "../../../styles/palette";
 import Button from "../../atoms/Button";
 import Icon from "../../atoms/Icon";
 import SearchBar from "../../molecules/SearchBar";
+import { recommendSearch, popularSearchTerm } from "../../../data/data";
+import TextButton from "../../atoms/TextButton";
+import IconButton from "../../atoms/IconButton";
 
 const modalRoot = document.getElementById("modal-root") as HTMLElement;
 
@@ -77,6 +80,40 @@ const RecPopSearchWrapper = styled.div`
   padding: 4px 0 28px;
 `;
 
+const RecentSearchBox = styled.div`
+  position: relative;
+  margin-bottom: 50px;
+
+  .clearAllButton {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+`;
+
+const RecentSearchItem = styled.div`
+  padding: 8px 0;
+  border-radius: 0 0 3px 3px;
+  position: relative;
+
+  .closeButton {
+    position: absolute;
+    right: 0;
+    height: 10px;
+    width: 10px;
+  }
+`;
+
+const RecentSearchTerm = styled.div`
+  font-size: 14px;
+  font-weight: 400;
+
+  &:hover {
+    font-weight: bold;
+    cursor: pointer;
+  }
+`;
+
 const SearchTitle = styled.h3`
   font-size: 14px;
   display: flex;
@@ -144,18 +181,51 @@ interface fast {
 }
 
 const SearchBarModal: React.FC<fast> = ({ isOpen, closeModal, children }) => {
+  // localstorage
+  const recommendSearchLength = recommendSearch.recommend_search.length;
+  let refs: React.MutableRefObject<React.RefObject<HTMLButtonElement>[]> =
+    useRef([...new Array(recommendSearchLength)].map(() => React.createRef()));
+
+  const [searchedWords, setSearchedWords] = useState<string[]>([]);
+
+  useEffect(() => {
+    localStorage.setItem("searchedWords", JSON.stringify(searchedWords));
+  }, [searchedWords]);
+
+  const saveData = (index: number) => {
+    const newSearchedWord = refs.current[index].current?.textContent;
+    if (newSearchedWord) {
+      setSearchedWords([newSearchedWord, ...searchedWords]);
+    }
+  };
+
+  const removeData = (filterword: string) => {
+    const filterWords = searchedWords.filter((word) => {
+      return word !== filterword;
+    });
+    setSearchedWords(filterWords);
+  };
+
+  const clearAllData = () => {
+    setSearchedWords([]);
+  };
+
+  // time standard
   const [time, setTime] = useState(`${getHour()}:00`);
 
   useEffect(() => {
     const id = setInterval(() => {
       let time = getHour();
-      console.log(time);
       setTime(`${time}:00`);
-    }, 60 * 1000);
+    }, 60 * 1000 * 10);
     return () => clearInterval(id);
   }, [time]);
 
   if (!isOpen) return null;
+
+  // popularSearchItem 1~10
+  const firstToFifth = popularSearchTerm.popular_search_term.slice(0, 5);
+  const sixthToTenth = popularSearchTerm.popular_search_term.slice(5);
 
   return createPortal(
     <ModalContainer>
@@ -174,16 +244,43 @@ const SearchBarModal: React.FC<fast> = ({ isOpen, closeModal, children }) => {
         </HeaderWrapper>
 
         <RecPopSearchWrapper>
+          {searchedWords[0] && (
+            <RecentSearchBox>
+              <SearchTitle>최근 검색어</SearchTitle>
+              <TextButton
+                className="clearAllButton"
+                onClick={() => clearAllData()}
+              >
+                전체 삭제
+              </TextButton>
+              <RecentSearchItem>
+                {searchedWords.map((value, index) => (
+                  <RecentSearchItem>
+                    <IconButton
+                      className="closeButton"
+                      iconName="Close"
+                      fillColor={palette.gray500}
+                      onClick={() => removeData(value)}
+                    />
+                    <RecentSearchTerm>{value}</RecentSearchTerm>
+                  </RecentSearchItem>
+                ))}
+              </RecentSearchItem>
+            </RecentSearchBox>
+          )}
+
           <SearchTitle>추천 검색어</SearchTitle>
           <RecommendSearchBox>
-            <Button className={"recommendButton"}>오늘의 특가</Button>
-            <Button className={"recommendButton"}>새해 인기취미</Button>
-            <Button className={"recommendButton"}>태블릿최저가</Button>
-            <Button className={"recommendButton"}>새해 인기 클래스</Button>
-            <Button className={"recommendButton"}>재테크 시작</Button>
-            <Button className={"recommendButton"}>N잡러 준비</Button>
-            <Button className={"recommendButton"}>일잘러의 비법</Button>
-            <Button className={"recommendButton"}>요즘 외국어 공부</Button>
+            {recommendSearch.recommend_search.map((value, index) => (
+              <button
+                className={"recommendButton"}
+                key={value}
+                ref={refs.current[index]}
+                onClick={() => saveData(index)}
+              >
+                {value}
+              </button>
+            ))}
           </RecommendSearchBox>
 
           <SearchTitle>
@@ -194,50 +291,23 @@ const SearchBarModal: React.FC<fast> = ({ isOpen, closeModal, children }) => {
               {time} 기준
             </span>
           </SearchTitle>
+
           <PopularSearchBox>
             <PopularSearchKeyList>
-              <PopularSearachItem>
-                <CandidateRanking>1</CandidateRanking>
-                <CandidateName>아이패드</CandidateName>
-              </PopularSearachItem>
-              <PopularSearachItem>
-                <CandidateRanking>2</CandidateRanking>
-                <CandidateName>이모티콘</CandidateName>
-              </PopularSearachItem>
-              <PopularSearachItem>
-                <CandidateRanking>3</CandidateRanking>
-                <CandidateName>일러스트</CandidateName>
-              </PopularSearachItem>
-              <PopularSearachItem>
-                <CandidateRanking>4</CandidateRanking>
-                <CandidateName>베이킹</CandidateName>
-              </PopularSearachItem>
-              <PopularSearachItem>
-                <CandidateRanking>5</CandidateRanking>
-                <CandidateName>포토샵</CandidateName>
-              </PopularSearachItem>
+              {firstToFifth.map((value, index) => (
+                <PopularSearachItem key={value}>
+                  <CandidateRanking>{index + 1}</CandidateRanking>
+                  <CandidateName>{value}</CandidateName>
+                </PopularSearachItem>
+              ))}
             </PopularSearchKeyList>
             <PopularSearchKeyList>
-              <PopularSearachItem>
-                <CandidateRanking>6</CandidateRanking>
-                <CandidateName>드로잉</CandidateName>
-              </PopularSearachItem>
-              <PopularSearachItem>
-                <CandidateRanking>7</CandidateRanking>
-                <CandidateName>그림</CandidateName>
-              </PopularSearachItem>
-              <PopularSearachItem>
-                <CandidateRanking>8</CandidateRanking>
-                <CandidateName>가죽공예</CandidateName>
-              </PopularSearachItem>
-              <PopularSearachItem>
-                <CandidateRanking>9</CandidateRanking>
-                <CandidateName>주식</CandidateName>
-              </PopularSearachItem>
-              <PopularSearachItem>
-                <CandidateRanking>10</CandidateRanking>
-                <CandidateName>자수</CandidateName>
-              </PopularSearachItem>
+              {sixthToTenth.map((value, index) => (
+                <PopularSearachItem key={value}>
+                  <CandidateRanking>{index + 6}</CandidateRanking>
+                  <CandidateName>{value}</CandidateName>
+                </PopularSearachItem>
+              ))}
             </PopularSearchKeyList>
           </PopularSearchBox>
         </RecPopSearchWrapper>

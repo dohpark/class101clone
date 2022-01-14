@@ -77,9 +77,11 @@ const Button: React.FC<ButtonProps> = ({
   className,
   onClick,
   disabled,
+  ...props
 }) => {
   return (
     <ButtonBox
+      {...props}
       backgroundColor={backgroundColor}
       color={color}
       size={size}
