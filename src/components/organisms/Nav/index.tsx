@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import styled from "styled-components";
 import palette from "../../../styles/palette";
 import Icon from "../../atoms/Icon";
@@ -48,10 +49,10 @@ const NavContainer = styled.nav`
     position: absolute;
     background-color: white;
     padding: 0 15px 20px 15px;
-    width: 100%;
     list-style-type: none;
     border: 0.5px solid ${palette.gray200};
     width: 180px;
+    height: 740px;
   }
 
   .firstUl {
@@ -105,14 +106,33 @@ const NavContainer = styled.nav`
 `;
 
 const Nav: React.FC = () => {
+  const firstUL = useRef<HTMLUListElement>(null);
+  const onMouseEnter = () => {
+    const { current } = firstUL;
+    if (current != null) {
+      current.style.width = `391px`;
+      console.log("hello");
+    }
+  };
+  const onMouseLeave = () => {
+    const { current } = firstUL;
+    if (current != null) {
+      current.style.width = `180px`;
+      console.log("hello");
+    }
+  };
+
   return (
     <NavContainer>
       <TextButton size="lg" color="black" className="tb category">
         전체 카테고리 &nbsp;
         <Icon fillColor={palette.black} iconName="Menu" size={12} />
-        <ul className="firstUl">
+        <ul className="firstUl" ref={firstUL}>
           <li className="categoryTitle">크리에이티브</li>
-          <li>
+          <li
+            onMouseEnter={() => onMouseEnter()}
+            onMouseLeave={() => onMouseLeave()}
+          >
             디지털드로잉
             <ul className="secondUl">
               <li className="categoryTitle">디지털 드로잉</li>
@@ -126,9 +146,12 @@ const Nav: React.FC = () => {
               <li>더 새로운 디지털 드로잉</li>
             </ul>
           </li>
-          <li>
+          <li
+            onMouseEnter={() => onMouseEnter()}
+            onMouseLeave={() => onMouseLeave()}
+          >
             드로잉
-            {/* <ul>
+            <ul className="secondUl">
               <li className="categoryTitle">드로잉</li>
               <li>펜 · 연필</li>
               <li>마카</li>
@@ -140,11 +163,14 @@ const Nav: React.FC = () => {
               <li>동양화</li>
               <li>캘리그라피</li>
               <li>더 새로운 드로잉</li>
-            </ul> */}
+            </ul>
           </li>
-          <li>
+          <li
+            onMouseEnter={() => onMouseEnter()}
+            onMouseLeave={() => onMouseLeave()}
+          >
             공예
-            {/* <ul>
+            <ul className="secondUl">
               <li className="categoryTitle">공예</li>
               <li>대바늘 뜨게</li>
               <li>코바늘 뜨개</li>
@@ -155,16 +181,18 @@ const Nav: React.FC = () => {
               <li>나무 · 라탄 공예</li>
               <li>가죽 공예</li>
               <li>종이 공예</li>
-              <li>종이 공예</li>
               <li>레진 공예</li>
               <li>도예</li>
               <li>플라워 공예</li>
               <li>더 새로운 공예</li>
-            </ul> */}
+            </ul>
           </li>
-          <li>
+          <li
+            onMouseEnter={() => onMouseEnter()}
+            onMouseLeave={() => onMouseLeave()}
+          >
             요리 · 음료
-            {/* <ul>
+            <ul className="secondUl">
               <li className="categoryTitle">요리 · 음료</li>
               <li>한식</li>
               <li>일식 · 중식</li>
@@ -175,7 +203,7 @@ const Nav: React.FC = () => {
               <li>도시락 · 케이터링</li>
               <li>음료 · 술</li>
               <li> 더 새로운 요리 · 음료</li>
-            </ul> */}
+            </ul>
           </li>
           <li>베이킹 · 디저트</li>
           <li>음악</li>
