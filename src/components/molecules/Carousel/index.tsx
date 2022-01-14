@@ -211,7 +211,7 @@ const Carousel: React.FC<CarouselProps> = ({
       }
     }, 5 * 1000);
     return () => clearInterval(id);
-  }, [active]);
+  }, [active, autoplay, count, slidesView]);
 
   // children clone
   const childrenWithProps = Children.map(children, (child) => {

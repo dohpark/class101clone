@@ -1,7 +1,6 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import palette from "../../../styles/palette";
 import Image from "../../atoms/Image";
-import Pagination from "../Pagination";
 
 interface StyledBannerContainer {
   bgColor: string;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import palette from "../../../styles/palette";
 import Badge from "../../atoms/Badge";
 import Image from "../../atoms/Image";
@@ -175,7 +175,7 @@ const CarouselTopBanner: React.FC<BannerProps> = ({ array }) => {
       current.style.transform = `translateX(calc(-${width}px))`;
       resetAnimation();
     }
-  }, [page]);
+  }, [page, resetAnimation]);
 
   // autoplay
   useEffect(() => {
@@ -193,7 +193,7 @@ const CarouselTopBanner: React.FC<BannerProps> = ({ array }) => {
             <SlideProps ref={slideRef}>
               {imgsrcTitle.map((val) => (
                 <ImageContainer>
-                  {val[2] != "" && (
+                  {val[2] !== "" && (
                     <Badge size="md" className="badge" backgroundColor="red">
                       {val[2]}
                     </Badge>

@@ -113,7 +113,7 @@ const Nav: React.FC = () => {
         <ul className="firstUl">
           <li className="categoryTitle">크리에이티브</li>
           <li>
-            <a>디지털드로잉</a>
+            디지털드로잉
             <ul className="secondUl">
               <li className="categoryTitle">디지털 드로잉</li>
               <li>일러스트</li>
@@ -127,7 +127,7 @@ const Nav: React.FC = () => {
             </ul>
           </li>
           <li>
-            <a>드로잉</a>
+            드로잉
             {/* <ul>
               <li className="categoryTitle">드로잉</li>
               <li>펜 · 연필</li>
@@ -143,7 +143,7 @@ const Nav: React.FC = () => {
             </ul> */}
           </li>
           <li>
-            <a>공예</a>
+            공예
             {/* <ul>
               <li className="categoryTitle">공예</li>
               <li>대바늘 뜨게</li>
@@ -163,7 +163,7 @@ const Nav: React.FC = () => {
             </ul> */}
           </li>
           <li>
-            <a>요리 · 음료</a>
+            요리 · 음료
             {/* <ul>
               <li className="categoryTitle">요리 · 음료</li>
               <li>한식</li>
@@ -177,51 +177,23 @@ const Nav: React.FC = () => {
               <li> 더 새로운 요리 · 음료</li>
             </ul> */}
           </li>
-          <li>
-            <a>베이킹 · 디저트</a>
-          </li>
-          <li>
-            <a>음악</a>
-          </li>
-          <li>
-            <a>운동</a>
-          </li>
-          <li>
-            <a>라이프</a>
-          </li>
-          <li>
-            <a>사진 · 영상</a>
-          </li>
+          <li>베이킹 · 디저트</li>
+          <li>음악</li>
+          <li>운동</li>
+          <li>라이프</li>
+          <li>사진 · 영상</li>
           <li className="categoryTitle">수익창출</li>
-          <li>
-            <a>금융 · 재테크</a>
-          </li>
-          <li>
-            <a>창업 · 부업</a>
-          </li>
-          <li>
-            <a>성공마인드</a>
-          </li>
+          <li>금융 · 재테크</li>
+          <li>창업 · 부업</li>
+          <li>성공마인드</li>
           <li className="categoryTitle">커리어</li>
-          <li>
-            <a>디자인</a>
-          </li>
-          <li>
-            <a>개발 · 데이터</a>
-          </li>
-          <li>
-            <a>직무교육</a>
-          </li>
-          <li>
-            <a>글쓰기</a>
-          </li>
-          <li>
-            <a>언어 · 외국어</a>
-          </li>
+          <li>디자인</li>
+          <li>개발 · 데이터</li>
+          <li>직무교육</li>
+          <li>글쓰기</li>
+          <li>언어 · 외국어</li>
           <li className="categoryTitle">키즈</li>
-          <li>
-            <a>아동 교육</a>
-          </li>
+          <li>아동 교육</li>
         </ul>
       </TextButton>
       <TextButton size="lg" color="black" className="tb">
