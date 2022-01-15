@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import palette from "../../../styles/palette";
 import Badge from "../../atoms/Badge";
 import Image from "../../atoms/Image";
@@ -7,12 +7,25 @@ import IconButton from "../../atoms/IconButton";
 import Pagination from "../Pagination";
 import useProgressBar from "../../atoms/ProgressBar/useProgressBar";
 
+const getBackgroundColor = (bgColorImgArray: string[][], page: number) => {
+  const backgroundColor: string = bgColorImgArray[page][0];
+
+  return css`
+    background: ${backgroundColor};
+  `;
+};
+
+interface StyledBackgroundColor {
+  page: number;
+  bgColorImgArray: string[][];
+}
+
 const BannerBackground = styled.div`
   padding-bottom: 34px;
 `;
 
-const BannerContainer = styled.div`
-  background-color: pink;
+const BannerContainer = styled.div<StyledBackgroundColor>`
+  ${(props) => getBackgroundColor(props.bgColorImgArray, props.page)}
 `;
 
 const BannerWrapper = styled.div`
@@ -59,10 +72,14 @@ const TextWrapper = styled.div`
   background-color: transparent;
   padding-left: 48px;
   padding-bottom: 32px;
+`;
 
-  .text {
-    padding-top: 56px;
-  }
+const TextContent = styled.div`
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: 56px;
 
   .title {
     display: flex;
@@ -79,18 +96,15 @@ const TextWrapper = styled.div`
     font-weight: 500;
     max-width: 300px;
   }
-
-  .number {
-    position: relative;
-    transition: none;
-  }
 `;
 
 const PBRWrapper = styled.div`
   display: flex;
   align-items: center;
+  padding-bottom: 55px;
 
   .number {
+    position: relative;
     width: 60px;
     margin-right: 8px;
   }
@@ -114,6 +128,16 @@ interface BannerProps {
 }
 
 const CarouselTopBanner: React.FC<BannerProps> = ({ array }) => {
+  // bgColorImg Array
+  const bgColorImgArray = array.map((val) => {
+    let bgColor: string;
+    if (val.bgColor === "") bgColor = "green";
+    else bgColor = val.bgColor;
+
+    return [bgColor, val.img];
+  });
+
+  // imagesrcTitleBadge Array
   const imgsrcTitle = array.map((val) => {
     let badge: string;
     if (!val.badge) badge = "";
@@ -121,6 +145,8 @@ const CarouselTopBanner: React.FC<BannerProps> = ({ array }) => {
 
     return [val.img, val.title, badge];
   });
+
+  // progress bar
   const { resetAnimation, ProgressBar } = useProgressBar();
 
   // swipe effect
@@ -143,6 +169,7 @@ const CarouselTopBanner: React.FC<BannerProps> = ({ array }) => {
     subtitle = array[page].subtitle;
   }
 
+  // page
   if (page < 0) {
     setPage(lastIndex);
   } else if (page > lastIndex) {
@@ -182,24 +209,24 @@ const CarouselTopBanner: React.FC<BannerProps> = ({ array }) => {
 
   return (
     <BannerBackground>
-      <BannerContainer>
+      <BannerContainer bgColorImgArray={bgColorImgArray} page={page}>
         <BannerWrapper>
           <ImageCarouselContainer>
             <SlideProps ref={slideRef}>
-              {imgsrcTitle.map((val) => (
-                <ImageContainer key={val[1]}>
-                  {val[2] !== "" && (
+              {imgsrcTitle.map(([src, title, badge]) => (
+                <ImageContainer key={title}>
+                  {badge !== "" && (
                     <Badge size="md" className="badge" backgroundColor="red">
-                      {val[2]}
+                      {badge}
                     </Badge>
                   )}
-                  <Image src={val[0]} alt={val[1]} expand={false} />
+                  <Image src={src} alt={title} expand={false} />
                 </ImageContainer>
               ))}
             </SlideProps>
           </ImageCarouselContainer>
           <TextWrapper>
-            <div className="text">
+            <TextContent>
               <div>
                 <p className="title">{title}</p>
                 <p className="subtitle">{subtitle}</p>
@@ -229,7 +256,7 @@ const CarouselTopBanner: React.FC<BannerProps> = ({ array }) => {
                   onClick={onClickRight}
                 />
               </PBRWrapper>
-            </div>
+            </TextContent>
           </TextWrapper>
         </BannerWrapper>
       </BannerContainer>
