@@ -7,6 +7,15 @@ const SectionContainer = styled.div`
   max-width: 1176px;
   margin-left: auto;
   margin-right: auto;
+
+  @media screen and (min-width: 1024px) and (max-width: 1240px) {
+    margin-left: 32px;
+    margin-right: 32px;
+  }
+
+  @media screen and (min-width: 1240px) {
+    max-width: 1176px;
+  }
 `;
 
 const Header = styled.div`

@@ -29,12 +29,19 @@ const BannerContainer = styled.div<StyledBackgroundColor>`
 `;
 
 const BannerWrapper = styled.div`
-  max-width: 1176px;
-  width: 100%;
+  width: 90%;
   margin-left: auto;
   margin-right: auto;
   display: flex;
-  height: 450px;
+
+  @media screen and (min-width: 1024px) and (max-width: 1240px) {
+    margin-left: 32px;
+    margin-right: 32px;
+  }
+
+  @media screen and (min-width: 1240px) {
+    max-width: 1176px;
+  }
 `;
 
 const ImageCarouselContainer = styled.div`
@@ -83,30 +90,47 @@ const TextContent = styled.div`
 
   .title {
     display: flex;
+    height: 80px;
     max-width: 380px;
     align-items: center;
     font-size: 34px;
     font-weight: bold;
     color: ${palette.white};
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
   }
 
   .subtitle {
     margin: 10px 0 0;
+    height: 40px;
     color: ${palette.gray100};
     font-weight: 500;
     max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
   }
 `;
 
 const PBRWrapper = styled.div`
   display: flex;
   align-items: center;
+  justify-content: right;
   padding-bottom: 55px;
 
   .number {
     position: relative;
-    width: 60px;
+    min-width: 45px;
     margin-right: 8px;
+  }
+
+  .leftButton {
+    margin-left: 10px;
   }
 
   .rightButton {
@@ -200,12 +224,12 @@ const CarouselTopBanner: React.FC<BannerProps> = ({ array }) => {
   }, [page]);
 
   // autoplay
-  useEffect(() => {
-    const id = setInterval(() => {
-      setPage(page + 1);
-    }, 5 * 1000);
-    return () => clearInterval(id);
-  }, [page]);
+  // useEffect(() => {
+  //   const id = setInterval(() => {
+  //     setPage(page + 1);
+  //   }, 5 * 1000);
+  //   return () => clearInterval(id);
+  // }, [page]);
 
   return (
     <BannerBackground>

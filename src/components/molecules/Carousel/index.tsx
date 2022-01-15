@@ -54,6 +54,7 @@ const getNavPosition = (navPosition: "rightIn" | "eachSide") => {
     case "eachSide":
       return css`
         position: relative;
+
         .leftButton {
           position: absolute;
           z-index: 1;
@@ -62,6 +63,10 @@ const getNavPosition = (navPosition: "rightIn" | "eachSide") => {
 
           &:disabled {
             background-color: transparent;
+          }
+
+          @media screen and (min-width: 1024px) {
+            visibility: hidden;
           }
         }
 
@@ -73,6 +78,10 @@ const getNavPosition = (navPosition: "rightIn" | "eachSide") => {
 
           &:disabled {
             background-color: transparent;
+          }
+
+          @media screen and (max-width: 1240px) {
+            visibility: hidden;
           }
         }
       `;

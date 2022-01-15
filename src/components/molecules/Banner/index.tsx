@@ -20,7 +20,6 @@ const BannerContainer = styled.div<StyledBannerContainer>`
 `;
 
 const BannerWrapper = styled.div<StyledType>`
-  max-width: 1176px;
   width: 100%;
   margin-left: auto;
   margin-right: auto;
@@ -28,6 +27,15 @@ const BannerWrapper = styled.div<StyledType>`
 
   justify-content: space-between;
   position: relative;
+
+  @media screen and (min-width: 1024px) and (max-width: 1240px) {
+    margin-left: 32px;
+    margin-right: 32px;
+  }
+
+  @media screen and (min-width: 1240px) {
+    max-width: 1176px;
+  }
 `;
 
 const ImageWrapper = styled.div<StyledType>`

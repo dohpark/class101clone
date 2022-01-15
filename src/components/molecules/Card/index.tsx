@@ -77,16 +77,24 @@ const getTitleCSS = (
       return css`
         font-size: 14px;
         font-weight: 700;
-        line-height: 20px;
-        letter-spacing: -0.15px;
         margin-top: 8px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
       `;
     default:
       return css`
+        height: 40px;
+        line-height: 20px;
         font-size: 14px;
         font-weight: normal;
-        height: 40px;
         overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
       `;
   }
 };

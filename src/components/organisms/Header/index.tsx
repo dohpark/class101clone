@@ -4,25 +4,31 @@ import palette from "../../../styles/palette";
 import SearchBar from "../../molecules/SearchBar";
 
 const HeaderContainer = styled.header`
-  max-width: 1176px;
-  width: 100%;
   padding: 20px 0;
   margin-left: auto;
   margin-right: auto;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: left;
+
+  @media screen and (min-width: 1024px) and (max-width: 1240px) {
+    margin-left: 32px;
+    margin-right: 32px;
+  }
+
+  @media screen and (min-width: 1240px) {
+    max-width: 1176px;
+  }
 `;
 
 const LogoWrapper = styled.div`
-  width: 12.5%;
+  margin-right: 28px;
   font-size: 1.5rem;
   font-weight: 800;
 `;
 
 const ClassStoreWrapper = styled.div`
   display: flex;
-  width: 12.5%;
   margin-right: 36px;
 
   .class {
@@ -47,24 +53,41 @@ const ClassStoreWrapper = styled.div`
 `;
 
 const SearchWrapper = styled.div`
-  width: 35%;
+  @media screen and (min-width: 1024px) {
+    width: 420px;
+  }
 `;
 
 const ButtonWrapper = styled.div`
-  width: 40%;
   display: flex;
+  margin-left: auto;
 
-  .space {
-    width: 41%;
-    height: 1px;
-  }
   .buttons {
     display: flex;
-    flex-grow: 1;
   }
 
-  .creatorsupport,
-  .corpedu,
+  .creatorsupport {
+    font-weight: 400;
+    justify-content: end;
+    font-size: 14px;
+    margin: 0;
+    border: 0;
+    padding: 0;
+    color: ${palette.gray800};
+    margin-right: 24px;
+    min-width: 90px;
+  }
+  .corpedu {
+    font-weight: 400;
+    justify-content: end;
+    font-size: 14px;
+    margin: 0;
+    border: 0;
+    padding: 0;
+    color: ${palette.gray800};
+    margin-right: 24px;
+    min-width: 50px;
+  }
   .login {
     font-weight: 400;
     justify-content: end;
@@ -88,7 +111,6 @@ const Header = () => {
         <SearchBar placeholder={"찾으시는 취미가 있으신가요?"} modal={true} />
       </SearchWrapper>
       <ButtonWrapper>
-        <div className="space"></div>
         <div className="buttons">
           <Button className="creatorsupport">크리에이터 지원</Button>
           <Button className="corpedu">기업교육</Button>

@@ -4,7 +4,7 @@ import palette from "../../../styles/palette";
 
 const BarContainer = styled.div`
   width: 100%;
-  height: 3px;
+  height: 1px;
   background-color: ${palette.gray300};
   position: relative;
   border-radius: 3px;

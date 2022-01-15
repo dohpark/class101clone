@@ -10,6 +10,15 @@ const NavContainer = styled.nav`
   margin-left: auto;
   margin-right: auto;
 
+  @media screen and (min-width: 1024px) and (max-width: 1240px) {
+    margin-left: 32px;
+    margin-right: 32px;
+  }
+
+  @media screen and (min-width: 1240px) {
+    max-width: 1176px;
+  }
+
   .tb {
     margin-right: 32px;
     padding: 8px 0px 20px;
