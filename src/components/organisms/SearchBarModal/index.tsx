@@ -29,7 +29,7 @@ const ModalContainer = styled.div`
   top: 0;
   left: 0;
   z-index: 11;
-  margin: 8px 0px;
+  margin: 0px;
 `;
 
 const ModalBackground = styled.div`
@@ -45,20 +45,36 @@ const SearchModalContainer = styled.div`
 `;
 
 const HeaderWrapper = styled.div`
-  max-width: 1176px;
   width: 100%;
   padding: 20px 0;
-  margin-left: auto;
-  margin-right: auto;
   display: flex;
   align-items: center;
   justify-content: left;
+
+  @media screen and (max-width: 1024px) {
+    padding: 0;
+  }
+
+  @media screen and (min-width: 1024px) and (max-width: 1240px) {
+    margin-left: 32px;
+    margin-right: 32px;
+  }
+
+  @media screen and (min-width: 1240px) {
+    max-width: 1176px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 `;
 
 const LogoWrapper = styled.div`
   position: absolute;
   font-size: 1.5rem;
   font-weight: 800;
+
+  @media screen and (max-width: 1024px) {
+    display: none;
+  }
 `;
 
 const SearchBarWrapper = styled.div`
@@ -66,11 +82,20 @@ const SearchBarWrapper = styled.div`
   width: 676px;
   margin: auto;
 
+  @media screen and (max-width: 1024px) {
+    width: 100%;
+    padding: 8px 24px 8px 20px;
+  }
+
   .closeModal {
     padding: initial;
     width: 40px;
     font-size: 14px;
     color: ${palette.gray600};
+
+    @media screen and (max-width: 1024px) {
+      padding: 0;
+    }
   }
 `;
 
@@ -78,6 +103,12 @@ const RecPopSearchWrapper = styled.div`
   width: 676px;
   margin: auto;
   padding: 4px 0 28px;
+
+  @media screen and (max-width: 1024px) {
+    width: 95%;
+    padding: 24px 24px 28px;
+    margin: 0;
+  }
 `;
 
 const RecentSearchBox = styled.div`
@@ -125,6 +156,11 @@ const SearchTitle = styled.h3`
     font-size: 11px;
     font-weight: 400;
     color: ${palette.gray700};
+
+    @media screen and (max-width: 1024px) {
+      position: absolute;
+      right: 35px;
+    }
   }
 `;
 const RecommendSearchBox = styled.div`
@@ -148,6 +184,10 @@ const RecommendSearchBox = styled.div`
 
 const PopularSearchBox = styled.div`
   display: flex;
+
+  @media screen and (max-width: 1024px) {
+    flex-direction: column;
+  }
 `;
 
 const PopularSearchKeyList = styled.div`
@@ -195,7 +235,8 @@ const SearchBarModal: React.FC<fast> = ({ isOpen, closeModal, children }) => {
   const saveData = (index: number) => {
     const newSearchedWord = refs.current[index].current?.textContent;
     if (newSearchedWord) {
-      setSearchedWords([newSearchedWord, ...searchedWords]);
+      if (!searchedWords.includes(newSearchedWord))
+        setSearchedWords([newSearchedWord, ...searchedWords]);
     }
   };
 

@@ -83,6 +83,7 @@ const getTitleCSS = (
         display: -webkit-box;
         -webkit-line-clamp: 1;
         -webkit-box-orient: vertical;
+        word-break: keep-all;
       `;
     default:
       return css`
@@ -95,6 +96,7 @@ const getTitleCSS = (
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
+        word-break: keep-all;
       `;
   }
 };

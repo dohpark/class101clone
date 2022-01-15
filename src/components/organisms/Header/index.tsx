@@ -4,20 +4,25 @@ import palette from "../../../styles/palette";
 import SearchBar from "../../molecules/SearchBar";
 
 const HeaderContainer = styled.header`
-  padding: 20px 0;
-  margin-left: auto;
-  margin-right: auto;
   display: flex;
   align-items: center;
   justify-content: left;
 
+  @media screen and (max-width: 1024px) {
+    padding: 18px 24px 8px;
+  }
+
   @media screen and (min-width: 1024px) and (max-width: 1240px) {
+    padding: 20px 0;
     margin-left: 32px;
     margin-right: 32px;
   }
 
   @media screen and (min-width: 1240px) {
+    padding: 20px 0;
     max-width: 1176px;
+    margin-left: auto;
+    margin-right: auto;
   }
 `;
 
@@ -25,6 +30,10 @@ const LogoWrapper = styled.div`
   margin-right: 28px;
   font-size: 1.5rem;
   font-weight: 800;
+
+  @media screen and (max-width: 1024px) {
+    font-size: 18px;
+  }
 `;
 
 const ClassStoreWrapper = styled.div`
@@ -33,12 +42,13 @@ const ClassStoreWrapper = styled.div`
 
   .class {
     justify-content: start;
-    margin: 0;
+    margin: 0 20px 0 0;
     padding: 0;
     border: 0;
     font-size: 1.25rem;
     font-weight: 700;
     color: ${palette.orange700};
+    min-width: 52px;
   }
 
   .store {
@@ -49,12 +59,21 @@ const ClassStoreWrapper = styled.div`
     font-size: 1.25rem;
     font-weight: 700;
     color: ${palette.black};
+    min-width: 52px;
+  }
+
+  @media screen and (max-width: 768px) {
+    display: none;
   }
 `;
 
 const SearchWrapper = styled.div`
   @media screen and (min-width: 1024px) {
     width: 420px;
+  }
+
+  @media screen and (max-width: 1024px) {
+    width: 100%;
   }
 `;
 
@@ -96,6 +115,10 @@ const ButtonWrapper = styled.div`
     border: 0;
     padding: 0;
     color: ${palette.gray800};
+  }
+
+  @media screen and (max-width: 1024px) {
+    display: none;
   }
 `;
 

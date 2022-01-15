@@ -6,9 +6,16 @@ import TextButton from "../../atoms/TextButton";
 
 const NavContainer = styled.nav`
   display: flex;
-  max-width: 1176px;
-  margin-left: auto;
-  margin-right: auto;
+  background-color: ${palette.white};
+  border-bottom: 0.5px solid ${palette.gray200};
+
+  @media screen and  (max-width: 1024px) {
+    padding-left: 24px;
+    padding-right: 24px;
+    position: sticky;
+    top: 0;
+    z-index:3;
+  }
 
   @media screen and (min-width: 1024px) and (max-width: 1240px) {
     margin-left: 32px;
@@ -17,12 +24,23 @@ const NavContainer = styled.nav`
 
   @media screen and (min-width: 1240px) {
     max-width: 1176px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .tb {
     margin-right: 32px;
     padding: 8px 0px 20px;
     line-height: 24px;
+
+    @media screen and  (max-width: 1024px) {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      margin-right: 16px;
+      padding: 12px 0;
+      white-space: nowrap;
+    }
   }
 
   .tb:hover {
@@ -38,12 +56,20 @@ const NavContainer = styled.nav`
     font-size: 33px;
     font-weight: 100;
     color: ${palette.gray200};
+
+    @media screen and  (max-width: 1024px) {
+      display: none;
+    }
   }
 
   .lb {
     margin-left: 28px;
     margin-right: 0;
     font-weight: 400;
+
+    @media screen and  (max-width: 1024px) {
+      display: none;
+    }
   }
 
   // nav
@@ -52,6 +78,10 @@ const NavContainer = styled.nav`
     position: relative;
     height: 100%;
     z-index: 2;
+
+    @media screen and  (max-width: 1024px) {
+      display: none;
+    }
   }
 
   ul {
@@ -115,6 +145,7 @@ const NavContainer = styled.nav`
 `;
 
 const Nav: React.FC = () => {
+  // mouse event
   const firstUL = useRef<HTMLUListElement>(null);
   const onMouseEnter = () => {
     const { current } = firstUL;

@@ -11,6 +11,10 @@ const SearchBarForm = styled.form`
   .searchIcon {
     position: absolute;
     right: 2%;
+
+    @media screen and (max-width: 1024px) {
+      top: -5px;
+    }
   }
 `;
 
@@ -24,6 +28,10 @@ const SearchBarInput = styled.input`
   color: ${palette.gray900};
   padding: 12px 52px 12px 16px;
   outline: none;
+
+  @media screen and (max-width: 1024px) {
+    padding: 6px 12px;
+  }
 `;
 
 interface SearchBarProps {

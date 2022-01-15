@@ -3,10 +3,12 @@ import palette from "../../../styles/palette";
 import TextButton from "../../atoms/TextButton";
 
 const SectionContainer = styled.div`
-  margin-top: 72px;
-  max-width: 1176px;
-  margin-left: auto;
-  margin-right: auto;
+  margin-bottom: 72px;
+
+  @media screen and (max-width: 1024px) {
+    margin-left: 24px;
+    margin-right: 24px;
+  }
 
   @media screen and (min-width: 1024px) and (max-width: 1240px) {
     margin-left: 32px;
@@ -15,6 +17,8 @@ const SectionContainer = styled.div`
 
   @media screen and (min-width: 1240px) {
     max-width: 1176px;
+    margin-left: auto;
+    margin-right: auto;
   }
 `;
 
@@ -24,6 +28,12 @@ const Header = styled.div`
   justify-content: space-between;
   align-items: flex-end;
   margin-bottom: 20px;
+
+  .textButton {
+    @media screen and (max-width: 1024px) {
+      display: none;
+    }
+  }
 `;
 
 const Title = styled.h2`
@@ -59,7 +69,11 @@ const Section: React.FC<SectionProps> = ({
           <Title>{title}</Title>
           {subTitle && <SubTitle>{subTitle}</SubTitle>}
         </div>
-        {button && <TextButton size="md">전체 클래스 보기</TextButton>}
+        {button && (
+          <TextButton className="textButton" size="md">
+            전체 클래스 보기
+          </TextButton>
+        )}
       </Header>
       {children}
     </SectionContainer>

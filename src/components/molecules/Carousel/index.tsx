@@ -6,17 +6,32 @@ import React, {
 } from "react";
 import { useState, useRef } from "react";
 import styled, { css } from "styled-components";
+import useWindowDimensions from "../../../hooks/useWindowDimensions";
 import IconButton from "../../atoms/IconButton";
 import Pagination from "../Pagination";
 
 interface StyledSlideProps {
   slidesView: number;
   count: number;
+  type: "banner" | "popular" | "default";
 }
 
 interface StyledButtonProps {
   navPosition: "rightIn" | "eachSide";
 }
+
+const getWidthPercentage = (type: "popular" | "banner" | "default") => {
+  switch (type) {
+    case "banner":
+      return css`
+        width: 100%;
+      `;
+    default:
+      return css`
+        width: 95%;
+      `;
+  }
+};
 
 const SlidesViewWidth = (slidesView: number, count: number) => {
   if (count < slidesView) {
@@ -44,11 +59,19 @@ const getNavPosition = (navPosition: "rightIn" | "eachSide") => {
           margin: 0;
           border-top-right-radius: 0;
           border-bottom-right-radius: 0;
+
+          @media screen and (max-width: 1024px) {
+            display: none;
+          }
         }
         .rightButton {
           margin: 0;
           border-top-left-radius: 0;
           border-bottom-left-radius: 0;
+
+          @media screen and (max-width: 1024px) {
+            display: none;
+          }
         }
       `;
     case "eachSide":
@@ -65,8 +88,8 @@ const getNavPosition = (navPosition: "rightIn" | "eachSide") => {
             background-color: transparent;
           }
 
-          @media screen and (min-width: 1024px) {
-            visibility: hidden;
+          @media screen and (max-width: 1240px) {
+            display: none;
           }
         }
 
@@ -81,7 +104,7 @@ const getNavPosition = (navPosition: "rightIn" | "eachSide") => {
           }
 
           @media screen and (max-width: 1240px) {
-            visibility: hidden;
+            display: none;
           }
         }
       `;
@@ -114,10 +137,13 @@ const CarouselContainer = styled.div`
 const SlideProps = styled.section<StyledSlideProps>`
   width: 100%;
   display: flex;
-  transform: translateX(0);
   transition: transform 0.5s ease-in-out;
   position: relative;
   z-index: 0;
+
+  @media screen and (max-width: 1024px) {
+    ${(props) => getWidthPercentage(props.type)};
+  }
 
   > div {
     ${(props) => SlidesViewWidth(props.slidesView, props.count)};
@@ -125,6 +151,10 @@ const SlideProps = styled.section<StyledSlideProps>`
     position: relative;
     left: 0;
     transition: 0.5s;
+
+    @media screen and (max-width: 1024px) {
+      margin: 0 15px 0 0;
+    }
   }
 `;
 
@@ -133,6 +163,7 @@ const ButtonProps = styled.div<StyledButtonProps>`
 `;
 
 interface CarouselProps extends React.HTMLAttributes<HTMLDivElement> {
+  type?: "banner" | "popular" | "default";
   slidesView: number;
   navPosition: "rightIn" | "eachSide";
   paginationType?: "circle" | "number";
@@ -143,6 +174,7 @@ interface CarouselProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const Carousel: React.FC<CarouselProps> = ({
+  type = "default",
   slidesView,
   navPosition,
   paginationType,
@@ -156,6 +188,12 @@ const Carousel: React.FC<CarouselProps> = ({
 
   if (paginationType === "circle") paginationActive = true;
   else paginationActive = false;
+
+  // slidesPerView
+  const { innerWidth } = useWindowDimensions();
+  if (innerWidth <= 1024 && type !== "banner") slidesView = 2;
+  if (innerWidth <= 1024 && type === "popular") slidesView = 1;
+  // banner
 
   // button disabled
   const leftButtonDisabled = () => {
@@ -203,11 +241,13 @@ const Carousel: React.FC<CarouselProps> = ({
   useEffect(() => {
     const { current } = slideRef;
     if (current != null) {
-      console.log(current.offsetWidth);
-      const width = ((current.offsetWidth + 20) / slidesView) * active;
+      let margin: number;
+      if (innerWidth > 1024) margin = 20;
+      else margin = 15;
+      const width = ((current.offsetWidth + margin) / slidesView) * active;
       current.style.transform = `translateX(calc(-${width}px))`;
     }
-  }, [active, slidesView]);
+  }, [active, slidesView, innerWidth]);
 
   // autoplay
   useEffect(() => {
@@ -258,7 +298,12 @@ const Carousel: React.FC<CarouselProps> = ({
         />
       )}
       <CarouselContainer>
-        <SlideProps slidesView={slidesView} count={count} ref={slideRef}>
+        <SlideProps
+          slidesView={slidesView}
+          count={count}
+          ref={slideRef}
+          type={type}
+        >
           {childrenWithProps}
         </SlideProps>
         {navPosition !== "eachSide" && (

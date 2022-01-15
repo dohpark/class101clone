@@ -17,6 +17,10 @@ const BannerContainer = styled.div<StyledBannerContainer>`
   display: flex;
   flex-wrap: wrap-reverse;
   height: 210px;
+
+  @media screen and (max-width: 1024px) {
+    height: 320px;
+  }
 `;
 
 const BannerWrapper = styled.div<StyledType>`
@@ -27,6 +31,11 @@ const BannerWrapper = styled.div<StyledType>`
 
   justify-content: space-between;
   position: relative;
+
+  @media screen and (max-width: 1024px) {
+    margin-left: 24px;
+    margin-right: 24px;
+  }
 
   @media screen and (min-width: 1024px) and (max-width: 1240px) {
     margin-left: 32px;
@@ -44,6 +53,7 @@ const ImageWrapper = styled.div<StyledType>`
   bottom: -1px;
   display: block;
   height: 244px;
+  z-index: 0;
 `;
 
 const TextWrapper = styled.div<StyledType>`
@@ -52,17 +62,31 @@ const TextWrapper = styled.div<StyledType>`
   flex-direction: column;
   justify-content: center;
 
+  @media screen and (max-width: 1024px) {
+    padding-top: 32px;
+    justify-content: left;
+  }
+
   .title {
     font-size: 32px;
     font-weight: bold;
     margin: 0px;
     color: ${palette.white};
+    word-break: keep-all;
+    z-index: 1;
+
+    @media screen and (max-width: 1024px) {
+      font-size: 24px;
+      max-width: 230px;
+    }
   }
 
   .subtitle {
     font-size: 14px;
     margin: 6px 0px 0px;
     color: ${palette.white};
+    word-break: keep-all;
+    z-index: 1;
   }
 
   .button {

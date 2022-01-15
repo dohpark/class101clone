@@ -14,14 +14,17 @@ import Header from "./components/organisms/Header";
 import Nav from "./components/organisms/Nav";
 import Banner from "./components/molecules/Banner";
 import CarouselTopBanner from "./components/molecules/CarouselTopBanner";
+import BottomNav from "./components/organisms/BottomNav";
+
+const HomePage = styled.div``;
 
 const BannerContainer = styled.div`
-  margin-top: 72px;
+  margin-bottom: 72px;
 `;
 
 function App() {
   return (
-    <div className="App">
+    <HomePage>
       <Header />
       <Nav />
       <CarouselTopBanner array={topEvent.top_event} />
@@ -65,6 +68,7 @@ function App() {
       </Section>
       <BannerContainer>
         <Carousel
+          type="banner"
           slidesView={1}
           navPosition="rightIn"
           iconColor="black"
@@ -107,7 +111,12 @@ function App() {
         subTitle={"얼리버드 기간에만 받을 수 있는 최저가 할인 중이에요"}
         button={true}
       >
-        <Carousel slidesView={3} navPosition="eachSide" iconColor="black">
+        <Carousel
+          slidesView={3}
+          navPosition="eachSide"
+          iconColor="black"
+          type="popular"
+        >
           {popularEvent.popular_event.map(({ id, title, img, period }) => (
             <Card
               type="popularEvent"
@@ -119,7 +128,8 @@ function App() {
           ))}
         </Carousel>
       </Section>
-    </div>
+      <BottomNav />
+    </HomePage>
   );
 }
 

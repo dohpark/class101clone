@@ -10,7 +10,15 @@ type iconName =
   | "HeartOutline"
   | "Like"
   | "LikeOutline"
-  | "Search";
+  | "Bell"
+  | "Search"
+  | "Logo"
+  | "Menu"
+  | "Clock"
+  | "Class"
+  | "Store"
+  | "Account"
+  | "Help";
 
 const getButtonBackgroundColor = (color: string) => {
   switch (color) {

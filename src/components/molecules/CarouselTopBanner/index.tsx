@@ -6,6 +6,7 @@ import Image from "../../atoms/Image";
 import IconButton from "../../atoms/IconButton";
 import Pagination from "../Pagination";
 import useProgressBar from "../../atoms/ProgressBar/useProgressBar";
+import useWindowDimensions from "../../../hooks/useWindowDimensions";
 
 const getBackgroundColor = (bgColorImgArray: string[][], page: number) => {
   const backgroundColor: string = bgColorImgArray[page][0];
@@ -22,6 +23,7 @@ interface StyledBackgroundColor {
 
 const BannerBackground = styled.div`
   padding-bottom: 34px;
+  margin-bottom: 72px;
 `;
 
 const BannerContainer = styled.div<StyledBackgroundColor>`
@@ -33,6 +35,11 @@ const BannerWrapper = styled.div`
   margin-left: auto;
   margin-right: auto;
   display: flex;
+
+  @media screen and (max-width: 1024px) {
+    margin-left: 24px;
+    margin-right: 24px;
+  }
 
   @media screen and (min-width: 1024px) and (max-width: 1240px) {
     margin-left: 32px;
@@ -54,6 +61,7 @@ const ImageCarouselContainer = styled.div`
 const SlideProps = styled.div`
   margin: 0;
   height: 100%;
+  width: 100%;
   display: float;
   transform: translateX(0);
   transition: transform 0.5s ease-in-out;
@@ -79,6 +87,11 @@ const TextWrapper = styled.div`
   background-color: transparent;
   padding-left: 48px;
   padding-bottom: 32px;
+
+  @media screen and (min-width: 640px) and (max-width: 1024px) {
+    padding-left: 24px;
+    padding-bottom: 0px;
+  }
 `;
 
 const TextContent = styled.div`
@@ -101,6 +114,7 @@ const TextContent = styled.div`
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+    word-break: keep-all;
   }
 
   .subtitle {
@@ -114,6 +128,7 @@ const TextContent = styled.div`
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+    word-break: keep-all;
   }
 `;
 
@@ -121,7 +136,7 @@ const PBRWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: right;
-  padding-bottom: 55px;
+  padding-bottom: 65px;
 
   .number {
     position: relative;
@@ -214,6 +229,8 @@ const CarouselTopBanner: React.FC<BannerProps> = ({ array }) => {
     }
   };
 
+  // swipe aimation
+  const { innerWidth } = useWindowDimensions();
   useEffect(() => {
     const { current } = slideRef;
     if (current != null) {
@@ -221,15 +238,15 @@ const CarouselTopBanner: React.FC<BannerProps> = ({ array }) => {
       current.style.transform = `translateX(calc(-${width}px))`;
       resetAnimation();
     }
-  }, [page]);
+  }, [page, innerWidth]);
 
   // autoplay
-  // useEffect(() => {
-  //   const id = setInterval(() => {
-  //     setPage(page + 1);
-  //   }, 5 * 1000);
-  //   return () => clearInterval(id);
-  // }, [page]);
+  useEffect(() => {
+    const id = setInterval(() => {
+      setPage(page + 1);
+    }, 5 * 1000);
+    return () => clearInterval(id);
+  }, [page]);
 
   return (
     <BannerBackground>
