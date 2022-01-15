@@ -2,7 +2,7 @@ import styled from "styled-components";
 import palette from "../../../styles/palette";
 import Button from "../../atoms/Button";
 import Icon from "../../atoms/Icon";
-import IconButton from "../../atoms/IconButton";
+import { Link } from "react-router-dom";
 
 const BottomNavContainer = styled.nav`
   position: fixed;

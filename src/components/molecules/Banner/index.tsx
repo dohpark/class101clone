@@ -10,6 +10,10 @@ interface StyledType {}
 
 const BannerBackground = styled.div<StyledType>`
   padding-top: 34px;
+
+  a {
+    text-decoration: none;
+  }
 `;
 
 const BannerContainer = styled.div<StyledBannerContainer>`
@@ -99,6 +103,7 @@ const TextWrapper = styled.div<StyledType>`
     width: 90px;
     border-radius: 3px;
     background-color: ${palette.white};
+    z-index: 1;
   }
 `;
 
@@ -131,18 +136,20 @@ const Banner: React.FC<BannerProps> = ({
 
   return (
     <BannerBackground>
-      <BannerContainer bgColor={bgColor}>
-        <BannerWrapper>
-          <TextWrapper>
-            <div className="title">{title}</div>
-            <div className="subtitle">{subtitle}</div>
-            <div className="button">더 알아보기</div>
-          </TextWrapper>
-          <ImageWrapper>
-            <Image src={img} alt={title} expand={false} />
-          </ImageWrapper>
-        </BannerWrapper>
-      </BannerContainer>
+      <a target="slide" href="https://github.com/dohpark/class101clone">
+        <BannerContainer bgColor={bgColor}>
+          <BannerWrapper>
+            <TextWrapper>
+              <div className="title">{title}</div>
+              <div className="subtitle">{subtitle}</div>
+              <div className="button">더 알아보기</div>
+            </TextWrapper>
+            <ImageWrapper>
+              <Image src={img} alt={title} expand={false} />
+            </ImageWrapper>
+          </BannerWrapper>
+        </BannerContainer>
+      </a>
     </BannerBackground>
   );
 };

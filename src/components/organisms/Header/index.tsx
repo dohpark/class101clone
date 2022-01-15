@@ -8,6 +8,13 @@ const HeaderContainer = styled.header`
   align-items: center;
   justify-content: left;
 
+  a {
+    text-decoration: none;
+    &:visited {
+      color: ${palette.black};
+    }
+  }
+
   @media screen and (max-width: 1024px) {
     padding: 18px 24px 8px;
   }
@@ -26,10 +33,12 @@ const HeaderContainer = styled.header`
   }
 `;
 
-const LogoWrapper = styled.div`
+const LogoWrapper = styled.h1`
   margin-right: 28px;
   font-size: 1.5rem;
   font-weight: 800;
+  margin-top: 0;
+  margin-bottom: 0;
 
   @media screen and (max-width: 1024px) {
     font-size: 18px;
@@ -125,7 +134,9 @@ const ButtonWrapper = styled.div`
 const Header = () => {
   return (
     <HeaderContainer>
-      <LogoWrapper>CLASS102</LogoWrapper>
+      <a target="card" href="https://github.com/dohpark/class101clone">
+        <LogoWrapper>CLASS102</LogoWrapper>
+      </a>
       <ClassStoreWrapper>
         <Button className="class">클래스</Button>
         <Button className="store">스토어</Button>

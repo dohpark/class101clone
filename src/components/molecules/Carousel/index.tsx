@@ -28,7 +28,7 @@ const getWidthPercentage = (type: "popular" | "banner" | "default") => {
       `;
     default:
       return css`
-        width: 95%;
+        width: 100%;
       `;
   }
 };
@@ -151,10 +151,6 @@ const SlideProps = styled.section<StyledSlideProps>`
     position: relative;
     left: 0;
     transition: 0.5s;
-
-    @media screen and (max-width: 1024px) {
-      margin: 0 15px 0 0;
-    }
   }
 `;
 
@@ -189,7 +185,7 @@ const Carousel: React.FC<CarouselProps> = ({
   if (paginationType === "circle") paginationActive = true;
   else paginationActive = false;
 
-  // slidesPerView
+  // slidesPerViewResponsive
   const { innerWidth } = useWindowDimensions();
   if (innerWidth <= 1024 && type !== "banner") slidesView = 2;
   if (innerWidth <= 1024 && type === "popular") slidesView = 1;
@@ -241,9 +237,7 @@ const Carousel: React.FC<CarouselProps> = ({
   useEffect(() => {
     const { current } = slideRef;
     if (current != null) {
-      let margin: number;
-      if (innerWidth > 1024) margin = 20;
-      else margin = 15;
+      let margin = 20;
       const width = ((current.offsetWidth + margin) / slidesView) * active;
       current.style.transform = `translateX(calc(-${width}px))`;
     }

@@ -105,7 +105,14 @@ interface StyledTextContainer {
   type: "timeDeal" | "mdRecommend" | "openSoon" | "popularEvent";
 }
 
-const CardContainer = styled.div``;
+const CardContainer = styled.div`
+  a {
+    text-decoration: none;
+    &:visited {
+      color: ${palette.black};
+    }
+  }
+`;
 
 const ImageContainer = styled.div`
   position: relative;
@@ -335,98 +342,108 @@ const Card: React.FC<CardProps> = ({
 
   return (
     <CardContainer>
-      <ImageContainer>
-        {coupon && (
-          <Badge
-            size="md"
-            className="couponBadge"
-            color={palette.white}
-            backgroundColor={palette.red500}
-          >
-            {coupon}만원 쿠폰
-          </Badge>
-        )}
-        {like && (
-          <IconButton
-            className="likeIcon"
-            iconName="HeartOutline"
-            fillColor={palette.white}
-            size="sm"
-          />
-        )}
-        <Image src={img} alt={title} expand={true} />
-      </ImageContainer>
-      <TextContainer type={type}>
-        {type === "timeDeal" && (
-          <div className="timeDeal">
-            <div>⏰ 타임딜 종료까지</div>
-            <div className="leftTime">{timeLeft}</div>
-          </div>
-        )}
-        {creator && <div className="creator">{creator}</div>}
-        {type === "timeDeal" && <div className="title">[💣24시간] {title}</div>}
-        {type !== "timeDeal" && <div className="title">{title}</div>}
-        {(cheerRate || like || thumsUp) && (
-          <div className="icon">
-            {cheer && (
-              <span className="cheerRate">
-                <Icon fillColor={palette.red400} size={10} iconName="Bell" />
-                &nbsp;&nbsp;
-                {cheerRate}% 달성
+      <a target="card" href="https://github.com/dohpark/class101clone">
+        <ImageContainer>
+          {coupon && (
+            <Badge
+              size="md"
+              className="couponBadge"
+              color={palette.white}
+              backgroundColor={palette.red500}
+            >
+              {coupon}만원 쿠폰
+            </Badge>
+          )}
+          {like && (
+            <IconButton
+              className="likeIcon"
+              iconName="HeartOutline"
+              fillColor={palette.white}
+              size="sm"
+            />
+          )}
+          <Image src={img} alt={title} expand={true} />
+        </ImageContainer>
+        <TextContainer type={type}>
+          {type === "timeDeal" && (
+            <div className="timeDeal">
+              <div>⏰ 타임딜 종료까지</div>
+              <div className="leftTime">{timeLeft}</div>
+            </div>
+          )}
+          {creator && <div className="creator">{creator}</div>}
+          {type === "timeDeal" && (
+            <div className="title">[💣24시간] {title}</div>
+          )}
+          {type !== "timeDeal" && <div className="title">{title}</div>}
+          {(cheerRate || like || thumsUp) && (
+            <div className="icon">
+              {cheer && (
+                <span className="cheerRate">
+                  <Icon fillColor={palette.red400} size={10} iconName="Bell" />
+                  &nbsp;&nbsp;
+                  {cheerRate}% 달성
+                </span>
+              )}
+              {like && (
+                <span className="likeCount">
+                  <Icon
+                    fillColor={palette.gray600}
+                    size={10}
+                    iconName="Heart"
+                  />{" "}
+                  {like}
+                </span>
+              )}
+              {thumsUp && (
+                <span className="thumsUpRate">
+                  <Icon fillColor={palette.gray600} size={10} iconName="Like" />{" "}
+                  {thumsUp}%
+                </span>
+              )}
+            </div>
+          )}
+          {(cheerRate || like || thumsUp) && <div className="breakline"></div>}
+          {cheer && (
+            <div className="cheer">
+              <span className="cheerUntil">응원마감까지</span>
+              <span className="cheerDDay">{dDay}일 남음</span>
+            </div>
+          )}
+          {price && (
+            <div className="price">
+              {discountPercentage !== 0 && (
+                <span className="discountPercentage">
+                  {discountPercentage}%{" "}
+                </span>
+              )}
+              <span className="discountPerMonth">
+                월 {discountPerMonthString}원{" "}
               </span>
-            )}
-            {like && (
-              <span className="likeCount">
-                <Icon fillColor={palette.gray600} size={10} iconName="Heart" />{" "}
-                {like}
+              {price.installment && (
+                <span className="installment">({price.installment}개월)</span>
+              )}
+            </div>
+          )}
+          {period && period.startDate !== "0" && (
+            <div className="period">
+              <span className="dDay">D-{periodDDay}</span>
+              <span className="fullPeriod">
+                {periodStartDate} ~ {periodFinishDate}
               </span>
-            )}
-            {thumsUp && (
-              <span className="thumsUpRate">
-                <Icon fillColor={palette.gray600} size={10} iconName="Like" />{" "}
-                {thumsUp}%
-              </span>
-            )}
-          </div>
-        )}
-        {(cheerRate || like || thumsUp) && <div className="breakline"></div>}
-        {cheer && (
-          <div className="cheer">
-            <span className="cheerUntil">응원마감까지</span>
-            <span className="cheerDDay">{dDay}일 남음</span>
-          </div>
-        )}
-        {price && (
-          <div className="price">
-            {discountPercentage !== 0 && (
-              <span className="discountPercentage">{discountPercentage}% </span>
-            )}
-            <span className="discountPerMonth">
-              월 {discountPerMonthString}원{" "}
-            </span>
-            {price.installment && (
-              <span className="installment">({price.installment}개월)</span>
-            )}
-          </div>
-        )}
-        {period && period.startDate !== "0" && (
-          <div className="period">
-            <span className="dDay">D-{periodDDay}</span>
-            <span className="fullPeriod">
-              {periodStartDate} ~ {periodFinishDate}
-            </span>
-          </div>
-        )}
-        {type === "openSoon" && (
-          <Button
-            backgroundColor="orangeLight"
-            color="orange"
-            className="cheerButton"
-          >
-            응원하기
-          </Button>
-        )}
-      </TextContainer>
+            </div>
+          )}
+          {type === "openSoon" && (
+            <Button
+              backgroundColor="orangeLight"
+              color="orange"
+              className="cheerButton"
+            >
+              응원하기
+            </Button>
+          )}
+        </TextContainer>
+      </a>
     </CardContainer>
   );
 };

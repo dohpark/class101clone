@@ -36,6 +36,11 @@ const BannerWrapper = styled.div`
   margin-right: auto;
   display: flex;
 
+  @media screen and (max-width: 640px) {
+    flex-direction: column-reverse;
+    overflow-x: visible;
+  }
+
   @media screen and (max-width: 1024px) {
     margin-left: 24px;
     margin-right: 24px;
@@ -54,8 +59,13 @@ const BannerWrapper = styled.div`
 const ImageCarouselContainer = styled.div`
   width: 58%;
   position: relative;
-  top: 35px;
+  top: 20px;
   overflow: hidden;
+
+  @media screen and (max-width: 640px) {
+    flex-direction: column-reverse;
+    width: 100%;
+  }
 `;
 
 const SlideProps = styled.div`
@@ -88,6 +98,11 @@ const TextWrapper = styled.div`
   padding-left: 48px;
   padding-bottom: 32px;
 
+  @media screen and (max-width: 640px) {
+    margin: 0;
+    padding: 0;
+  }
+
   @media screen and (min-width: 640px) and (max-width: 1024px) {
     padding-left: 24px;
     padding-bottom: 0px;
@@ -101,9 +116,13 @@ const TextContent = styled.div`
   justify-content: space-between;
   padding-top: 56px;
 
+  @media screen and (max-width: 640px) {
+    margin: 0;
+    padding: 0;
+  }
+
   .title {
     display: flex;
-    height: 80px;
     max-width: 380px;
     align-items: center;
     font-size: 34px;
@@ -115,6 +134,13 @@ const TextContent = styled.div`
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     word-break: keep-all;
+
+    @media screen and (max-width: 640px) {
+      font-size: 26px;
+      line-height: 34px;
+      max-width: 300px;
+      margin-bottom: 0;
+    }
   }
 
   .subtitle {
@@ -129,6 +155,14 @@ const TextContent = styled.div`
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     word-break: keep-all;
+
+    @media screen and (max-width: 640px) {
+      font-size: 14px;
+      max-width: 300px;
+      line-height: 20px;
+      font-weight: 400;
+      color: ${palette.gray400};
+    }
   }
 `;
 
@@ -137,6 +171,10 @@ const PBRWrapper = styled.div`
   align-items: center;
   justify-content: right;
   padding-bottom: 65px;
+
+  @media screen and (max-width: 640px) {
+    display: none;
+  }
 
   .number {
     position: relative;
@@ -261,7 +299,12 @@ const CarouselTopBanner: React.FC<BannerProps> = ({ array }) => {
                       {badge}
                     </Badge>
                   )}
-                  <Image src={src} alt={title} expand={false} />
+                  <a
+                    target="slide"
+                    href="https://github.com/dohpark/class101clone"
+                  >
+                    <Image src={src} alt={title} expand={false} />
+                  </a>
                 </ImageContainer>
               ))}
             </SlideProps>
