@@ -154,6 +154,7 @@ const SearchTitle = styled.h3`
   align-items: center;
   font-weight: bold;
   flex: 1 1 0%;
+  position: relative;
 
   .timeStandard {
     font-size: 11px;
