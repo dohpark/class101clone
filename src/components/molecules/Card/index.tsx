@@ -108,9 +108,7 @@ interface StyledTextContainer {
 const CardContainer = styled.div`
   a {
     text-decoration: none;
-    &:visited {
-      color: ${palette.black};
-    }
+    color: ${palette.black};
   }
 `;
 

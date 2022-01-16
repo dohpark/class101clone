@@ -15,6 +15,9 @@ const HeaderContainer = styled.header`
     &:visited {
       color: ${palette.black};
     }
+    &:link {
+      color: ${palette.black};
+    }
   }
 
   @media screen and (max-width: 1024px) {
