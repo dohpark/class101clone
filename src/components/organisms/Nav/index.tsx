@@ -8,7 +8,6 @@ const NavContainer = styled.nav`
   display: flex;
   background-color: ${palette.white};
   border-bottom: 0.5px solid ${palette.gray200};
-  overflow-y: hidden;
 
 
   @media screen and  (max-width: 1024px) {
@@ -17,7 +16,7 @@ const NavContainer = styled.nav`
     position: sticky;
     top: 0;
     z-index:3;
-    overflow-x: auto;
+    overflow-x: scroll;
   }
 
   @media screen and (min-width: 1024px) and (max-width: 1240px) {
