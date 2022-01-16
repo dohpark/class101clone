@@ -139,6 +139,7 @@ const TextContent = styled.div`
       font-size: 26px;
       line-height: 34px;
       max-width: 300px;
+      min-width: 270px;
       margin-bottom: 0;
     }
   }
@@ -159,6 +160,7 @@ const TextContent = styled.div`
     @media screen and (max-width: 640px) {
       font-size: 14px;
       max-width: 300px;
+      min-width: 170px;
       line-height: 20px;
       font-weight: 400;
       color: ${palette.gray400};

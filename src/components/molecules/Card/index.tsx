@@ -149,6 +149,10 @@ const TextContainer = styled.div<StyledTextContainer>`
     font-weight: 600;
     color: ${palette.white};
     background-color: ${palette.blue800};
+
+    @media screen and (max-width: 640px) {
+      letter-spacing: -0.5px;
+    }
   }
 
   .creator {
@@ -212,6 +216,8 @@ const TextContainer = styled.div<StyledTextContainer>`
   }
 
   .price {
+    min-width: 168px;
+
     .discountPercentage {
       font-size: 0.8125rem;
       font-weight: 700;
