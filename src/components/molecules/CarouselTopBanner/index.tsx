@@ -115,7 +115,6 @@ const TextContent = styled.div`
   flex-direction: column;
   justify-content: space-between;
   padding-top: 56px;
-  min-width: 276px;
 
   @media screen and (max-width: 640px) {
     margin: 0;
@@ -146,7 +145,6 @@ const TextContent = styled.div`
 
   .subtitle {
     margin: 10px 0 0;
-    min-width: 280px;
     height: 40px;
     color: ${palette.gray100};
     font-weight: 500;
@@ -157,7 +155,6 @@ const TextContent = styled.div`
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     word-break: keep-all;
-    white-space: pre-line;
 
     @media screen and (max-width: 640px) {
       font-size: 14px;

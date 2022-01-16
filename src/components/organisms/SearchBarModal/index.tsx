@@ -42,6 +42,7 @@ const ModalBackground = styled.div`
 const SearchModalContainer = styled.div`
   width: 100%;
   background-color: ${palette.white};
+  overflow-y: scroll;
 `;
 
 const HeaderWrapper = styled.div`

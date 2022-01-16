@@ -111,6 +111,19 @@ const EachSideContainer = styled.div<StyledButtonProps>`
   width: 100%;
   ${(props) =>
     props.navPosition === "eachSide" && getNavPosition(props.navPosition)};
+
+  .circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    bottom: 15px;
+    z-index: 333;
+
+    @media screen and (max-width: 1240px) {
+      bottom: 20px;
+    }
+  }
 `;
 
 const CarouselContainer = styled.div`
@@ -121,12 +134,6 @@ const CarouselContainer = styled.div`
   display: flex;
   align-items: center;
 
-  .circle {
-    display: absolute;
-    bottom: 10%;
-    left: 36.5%;
-    z-index: 333;
-  }
   @media screen and (max-width: 1240px) {
     overflow-x: scroll;
   }
@@ -318,17 +325,17 @@ const Carousel: React.FC<CarouselProps> = ({
             />
           </ButtonProps>
         )}
-        {paginationActive && (
-          <Pagination
-            className="circle"
-            paginationType={paginationType}
-            slidesPerView={slidesView}
-            active={active}
-            childrenCount={count}
-            onClickPaginationHandler={onClickPaginationHandler}
-          />
-        )}
       </CarouselContainer>
+      {paginationActive && (
+        <Pagination
+          className="circle"
+          paginationType={paginationType}
+          slidesPerView={slidesView}
+          active={active}
+          childrenCount={count}
+          onClickPaginationHandler={onClickPaginationHandler}
+        />
+      )}
     </EachSideContainer>
   );
 };

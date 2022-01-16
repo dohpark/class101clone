@@ -6,9 +6,7 @@ const pageNumberToString = (pageNumber: number) => {
   else return `${pageNumber}`;
 };
 
-const PaginationContainer = styled.div`
-  position: absolute;
-`;
+const PaginationContainer = styled.div``;
 
 const PaginationNumber = styled.div`
   font-size: 14px;
@@ -33,7 +31,6 @@ const PaginationNumber = styled.div`
 
 const PaginationCircle = styled.div`
   display: flex;
-
   .circle {
     margin: 0px 4px;
     width: 6px;
@@ -46,7 +43,7 @@ const PaginationCircle = styled.div`
 
   .longCircle {
     margin: 0px 4px;
-    width: 24px;
+    width: 20px;
     height: 6px;
     background-color: ${palette.white};
     border-radius: 3px;
@@ -78,7 +75,7 @@ const Pagination: React.FC<PaginationProps> = ({
   const array = Array.from(Array(pages).keys());
   const circleOrNot = (index: number) => {
     if (active === index) return "longCircle";
-    else return "circle";
+    else return "";
   };
 
   if (pages > 1)
@@ -97,7 +94,7 @@ const Pagination: React.FC<PaginationProps> = ({
               return (
                 <div
                   key={val}
-                  className={circleOrNot(index)}
+                  className={`${circleOrNot(index)} circle`}
                   onClick={() => onClickPaginationHandler(index)}
                 ></div>
               );
