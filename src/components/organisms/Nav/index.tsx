@@ -151,14 +151,12 @@ const Nav: React.FC = () => {
     const { current } = firstUL;
     if (current != null) {
       current.style.width = `391px`;
-      console.log("hello");
     }
   };
   const onMouseLeave = () => {
     const { current } = firstUL;
     if (current != null) {
       current.style.width = `180px`;
-      console.log("hello");
     }
   };
 

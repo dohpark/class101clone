@@ -43,7 +43,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ placeholder, modal }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const openModal = () => {
-    console.log(isOpen);
     setIsOpen(true);
   };
 

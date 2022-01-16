@@ -1,9 +1,4 @@
-import React, {
-  Children,
-  cloneElement,
-  isValidElement,
-  useEffect,
-} from "react";
+import React, { Children, useEffect } from "react";
 import { useState, useRef } from "react";
 import styled, { css } from "styled-components";
 import useWindowDimensions from "../../../hooks/useWindowDimensions";
@@ -225,7 +220,7 @@ const Carousel: React.FC<CarouselProps> = ({
       setActive(active + 1);
     }
   };
-
+  // pagination
   const onClickPaginationHandler = (index: number) => {
     setActive(index);
   };
@@ -257,17 +252,17 @@ const Carousel: React.FC<CarouselProps> = ({
   }, [active, autoplay, count, slidesView]);
 
   // children clone
-  const childrenWithProps = Children.map(children, (child) => {
-    if (isValidElement(child)) {
-      return cloneElement(child, {
-        slidesView,
-        active,
-        count,
-        onClickPaginationHandler,
-      });
-    }
-    return child;
-  });
+  // const childrenWithProps = Children.map(children, (child) => {
+  //   if (isValidElement(child)) {
+  //     return cloneElement(child, {
+  //       slidesView,
+  //       active,
+  //       count,
+  //       onClickPaginationHandler,
+  //     });
+  //   }
+  //   return child;
+  // });
 
   return (
     <EachSideContainer navPosition={navPosition}>
@@ -298,7 +293,7 @@ const Carousel: React.FC<CarouselProps> = ({
           ref={slideRef}
           type={type}
         >
-          {childrenWithProps}
+          {children}
         </SlideProps>
         {navPosition !== "eachSide" && (
           <ButtonProps navPosition={navPosition}>
