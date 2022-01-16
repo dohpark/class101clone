@@ -42,12 +42,20 @@ interface SearchBarProps {
 const SearchBar: React.FC<SearchBarProps> = ({ placeholder, modal }) => {
   const [isOpen, setIsOpen] = useState(false);
 
+  let windowOffset: number;
   const openModal = () => {
     setIsOpen(true);
+    windowOffset = window.scrollY;
+    document.body.setAttribute(
+      "style",
+      `position: fixed; top: ${windowOffset}px; left: 0; right: 0;`
+    );
   };
 
   const closeModal = () => {
     setIsOpen(false);
+    document.body.setAttribute("style", "margin: 0");
+    window.scrollTo(0, windowOffset);
   };
 
   return (

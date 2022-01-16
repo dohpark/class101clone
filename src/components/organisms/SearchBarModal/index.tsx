@@ -42,7 +42,8 @@ const ModalBackground = styled.div`
 const SearchModalContainer = styled.div`
   width: 100%;
   background-color: ${palette.white};
-  overflow-y: scroll;
+  overflow-y: auto;
+  height: 60vh;
 `;
 
 const HeaderWrapper = styled.div`
@@ -85,7 +86,7 @@ const SearchBarWrapper = styled.div`
 
   @media screen and (max-width: 1024px) {
     width: 100%;
-    padding: 8px 24px 8px 20px;
+    padding: 8px 0px 0px 20px;
   }
 
   .closeModal {
@@ -107,7 +108,7 @@ const RecPopSearchWrapper = styled.div`
 
   @media screen and (max-width: 1024px) {
     width: 95%;
-    padding: 24px 24px 28px;
+    padding: 24px 0px 28px 24px;
     margin: 0;
   }
 `;
@@ -115,12 +116,6 @@ const RecPopSearchWrapper = styled.div`
 const RecentSearchBox = styled.div`
   position: relative;
   margin-bottom: 50px;
-
-  .clearAllButton {
-    position: absolute;
-    top: 0;
-    right: 0;
-  }
 `;
 
 const RecentSearchItem = styled.div`
@@ -133,6 +128,13 @@ const RecentSearchItem = styled.div`
     right: 0;
     height: 10px;
     width: 10px;
+    top: 7px;
+    right: 0px;
+
+    @media screen and (max-width: 1024px) {
+      position: absolute;
+      right: 35px;
+    }
   }
 `;
 
@@ -157,6 +159,17 @@ const SearchTitle = styled.h3`
     font-size: 11px;
     font-weight: 400;
     color: ${palette.gray700};
+
+    @media screen and (max-width: 1024px) {
+      position: absolute;
+      right: 35px;
+    }
+  }
+
+  .clearAllButton {
+    position: absolute;
+    top: 0;
+    right: 0px;
 
     @media screen and (max-width: 1024px) {
       position: absolute;
@@ -288,13 +301,16 @@ const SearchBarModal: React.FC<fast> = ({ isOpen, closeModal, children }) => {
         <RecPopSearchWrapper>
           {searchedWords[0] && (
             <RecentSearchBox>
-              <SearchTitle>최근 검색어</SearchTitle>
-              <TextButton
-                className="clearAllButton"
-                onClick={() => clearAllData()}
-              >
-                전체 삭제
-              </TextButton>
+              <SearchTitle>
+                최근 검색어
+                <TextButton
+                  className="clearAllButton"
+                  onClick={() => clearAllData()}
+                >
+                  전체 삭제
+                </TextButton>
+              </SearchTitle>
+
               <RecentSearchItem>
                 {searchedWords.map((value, index) => (
                   <RecentSearchItem>
