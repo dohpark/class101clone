@@ -124,8 +124,11 @@ const CarouselContainer = styled.div`
   .circle {
     display: absolute;
     bottom: 10%;
-    left: 46%;
+    left: 36.5%;
     z-index: 333;
+  }
+  @media screen and (max-width: 1240px) {
+    overflow-x: scroll;
   }
 `;
 

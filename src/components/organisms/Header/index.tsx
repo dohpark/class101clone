@@ -2,6 +2,8 @@ import styled from "styled-components";
 import Button from "../../atoms/Button";
 import palette from "../../../styles/palette";
 import SearchBar from "../../molecules/SearchBar";
+import useWindowDimensions from "../../../hooks/useWindowDimensions";
+import { useEffect, useState } from "react";
 
 const HeaderContainer = styled.header`
   display: flex;
@@ -132,6 +134,14 @@ const ButtonWrapper = styled.div`
 `;
 
 const Header = () => {
+  const [changeSearchBar, setChangeSearchBar] = useState(false);
+  const { innerWidth } = useWindowDimensions();
+
+  useEffect(() => {
+    if (innerWidth <= 1240) setChangeSearchBar(true);
+    else setChangeSearchBar(false);
+  }, [innerWidth]);
+
   return (
     <HeaderContainer>
       <a target="card" href="https://github.com/dohpark/class101clone">
@@ -142,7 +152,12 @@ const Header = () => {
         <Button className="store">스토어</Button>
       </ClassStoreWrapper>
       <SearchWrapper>
-        <SearchBar placeholder={"찾으시는 취미가 있으신가요?"} modal={true} />
+        {changeSearchBar && (
+          <SearchBar placeholder={"검색어 입력"} modal={true} />
+        )}
+        {!changeSearchBar && (
+          <SearchBar placeholder={"찾으시는 취미가 있으신가요?"} modal={true} />
+        )}
       </SearchWrapper>
       <ButtonWrapper>
         <div className="buttons">

@@ -13,6 +13,7 @@ const BannerBackground = styled.div<StyledType>`
 
   a {
     text-decoration: none;
+    color: ${palette.black};
   }
 `;
 

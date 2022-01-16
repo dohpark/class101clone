@@ -8,6 +8,7 @@ const NavContainer = styled.nav`
   display: flex;
   background-color: ${palette.white};
   border-bottom: 0.5px solid ${palette.gray200};
+  overflow-x: scroll;
 
   @media screen and  (max-width: 1024px) {
     padding-left: 24px;
