@@ -133,10 +133,6 @@ const CarouselContainer = styled.div`
   margin: auto;
   display: flex;
   align-items: center;
-
-  @media screen and (max-width: 1240px) {
-    overflow-x: scroll;
-  }
 `;
 
 const SlideProps = styled.section<StyledSlideProps>`
@@ -155,7 +151,6 @@ const SlideProps = styled.section<StyledSlideProps>`
     margin: 0 20px 0 0;
     position: relative;
     left: 0;
-    transition: 0.5s;
   }
 `;
 
@@ -244,7 +239,10 @@ const Carousel: React.FC<CarouselProps> = ({
     if (current != null) {
       let margin = 20;
       const width = ((current.offsetWidth + margin) / slidesView) * active;
-      current.style.transform = `translateX(calc(-${width}px))`;
+      current.style.transform = `translateX(-${width}px)`;
+
+      const transX = Number(current.style.transform.replace(/[^0-9.-]/g, ""));
+      setTransLeftOffset(transX);
     }
   }, [active, slidesView, innerWidth]);
 
@@ -260,6 +258,91 @@ const Carousel: React.FC<CarouselProps> = ({
     }, 5 * 1000);
     return () => clearInterval(id);
   }, [active, autoplay, count, slidesView]);
+
+  // drag & scroll
+  const [pressed, setPressed] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [transLeftOffset, setTransLeftOffset] = useState(0);
+  const [walk, setWalk] = useState(0);
+  const slide = slideRef.current;
+  if (slide) slide.ondragstart = () => false;
+
+  const handleMouseDown = (event: React.MouseEvent<HTMLElement>) => {
+    setPressed(true);
+    if (slide) {
+      slide.style.cursor = "grabbing";
+      slide.style.transition = "transform 0s cubic-bezier(1,-0.01, 1, 1)";
+      setStartX(event.pageX);
+    }
+  };
+
+  const handleMouseMove = (event: React.MouseEvent<HTMLElement>) => {
+    if (pressed && slide && startX) {
+      const x = event.pageX - startX;
+      const speed = 0.8;
+
+      const walk = x * speed * -1;
+
+      slide.style.transform = `translateX(${-walk + transLeftOffset}px)`;
+      setWalk(walk);
+    }
+  };
+
+  const handleMouseUpAndLeave = () => {
+    if (slide && pressed) {
+      slide.style.cursor = "grab";
+      slide.style.transition = "transform 0.5s ease-in";
+
+      let margin = 20;
+      const widthPerSlide = (slide.offsetWidth + margin) / slidesView;
+      const round = Math.round(walk / widthPerSlide);
+
+      if (round === 0) {
+        slide.style.transform = `translateX(-${widthPerSlide * active}px)`;
+        setWalk(0);
+      }
+      if (round !== 0) {
+        setActive(active + round);
+        slide.style.transform = `translateX(-${
+          widthPerSlide * (active + round)
+        }px)`;
+        setWalk(0);
+      }
+
+      const transX = Number(slide.style.transform.replace(/[^0-9.-]/g, ""));
+      setTransLeftOffset(transX);
+
+      // 첫번째 슬라이드에서 왼쪽으로 넘길려 할때
+      if (transX > 0) {
+        slide.style.transform = `translateX(0px)`;
+        setActive(0);
+        setWalk(0);
+        setTransLeftOffset(0);
+      }
+
+      // 마지막 슬라이드에서 오른쪽으로 넘길려 할때
+      const maxTransX =
+        ((slide.offsetWidth + margin) / slidesView) * (count - slidesView) * -1;
+      if (transX < maxTransX) {
+        slide.style.transform = `translateX(${maxTransX}px)`;
+        setActive(count - slidesView);
+        setWalk(0);
+        setTransLeftOffset(maxTransX);
+      }
+    }
+    setPressed(false);
+  };
+
+  const handleMouseUp = (event: React.MouseEvent<HTMLElement>) => {
+    handleMouseUpAndLeave();
+  };
+  const handleMouseLeave = (event: React.MouseEvent<HTMLElement>) => {
+    handleMouseUpAndLeave();
+  };
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault();
+  };
 
   // children clone
   // const childrenWithProps = Children.map(children, (child) => {
@@ -296,7 +379,13 @@ const Carousel: React.FC<CarouselProps> = ({
           disabled={rightButtonDisabled()}
         />
       )}
-      <CarouselContainer>
+      <CarouselContainer
+        onMouseDown={handleMouseDown}
+        onMouseLeave={handleMouseLeave}
+        onMouseUp={handleMouseUp}
+        onMouseMove={handleMouseMove}
+        onClick={handleClick}
+      >
         <SlideProps
           slidesView={slidesView}
           count={count}
