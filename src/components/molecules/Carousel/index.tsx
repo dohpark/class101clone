@@ -15,6 +15,15 @@ interface StyledButtonProps {
   navPosition: "rightIn" | "eachSide";
 }
 
+interface StyledOuterContainer {
+  navPosition: "rightIn" | "eachSide";
+  type: "popular" | "banner" | "default";
+}
+
+interface StyledInnerContainer {
+  type: "popular" | "banner" | "default";
+}
+
 const getWidthPercentage = (type: "popular" | "banner" | "default") => {
   switch (type) {
     case "banner":
@@ -106,11 +115,45 @@ const getNavPosition = (navPosition: "rightIn" | "eachSide") => {
   }
 };
 
-const EachSideContainer = styled.div<StyledButtonProps>`
+const getOuterContainerResponsiveStyle = (
+  type: "default" | "banner" | "popular"
+) => {
+  switch (type) {
+    case "banner":
+      return css``;
+    default:
+      return css`
+        margin-left: -24px;
+        margin-right: -24px;
+        width: calc(100% + 48px);
+        overflow: hidden;
+      `;
+  }
+};
+
+const getInnerContainerResponsiveStyle = (
+  type: "default" | "banner" | "popular"
+) => {
+  switch (type) {
+    case "banner":
+      return css``;
+    default:
+      return css`
+        overflow: visible;
+        width: calc(100% - 48px);
+      `;
+  }
+};
+
+const EachSideContainer = styled.div<StyledOuterContainer>`
   margin: auto;
   width: 100%;
   ${(props) =>
     props.navPosition === "eachSide" && getNavPosition(props.navPosition)};
+
+  @media screen and (max-width: 1024px) {
+    ${(props) => getOuterContainerResponsiveStyle(props.type)}
+  }
 
   .circle {
     display: flex;
@@ -126,13 +169,17 @@ const EachSideContainer = styled.div<StyledButtonProps>`
   }
 `;
 
-const CarouselContainer = styled.div`
+const CarouselContainer = styled.div<StyledInnerContainer>`
   width: 100%;
   overflow: hidden;
   position: relative;
   margin: auto;
   display: flex;
   align-items: center;
+
+  @media screen and (max-width: 1024px) {
+    ${(props) => getInnerContainerResponsiveStyle(props.type)}
+  }
 `;
 
 const SlideProps = styled.section<StyledSlideProps>`
@@ -189,7 +236,6 @@ const Carousel: React.FC<CarouselProps> = ({
   const { innerWidth } = useWindowDimensions();
   if (innerWidth <= 1024 && type !== "banner") slidesView = 2;
   if (innerWidth <= 1024 && type === "popular") slidesView = 1;
-  // banner
 
   // button disabled
   const leftButtonDisabled = () => {
@@ -358,7 +404,7 @@ const Carousel: React.FC<CarouselProps> = ({
   // });
 
   return (
-    <EachSideContainer navPosition={navPosition}>
+    <EachSideContainer navPosition={navPosition} type={type}>
       {navPosition === "eachSide" && (
         <IconButton
           className="leftButton"
@@ -385,6 +431,7 @@ const Carousel: React.FC<CarouselProps> = ({
         onMouseUp={handleMouseUp}
         onMouseMove={handleMouseMove}
         onClick={handleClick}
+        type={type}
       >
         <SlideProps
           slidesView={slidesView}
