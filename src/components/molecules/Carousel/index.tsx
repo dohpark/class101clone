@@ -347,6 +347,7 @@ const Carousel: React.FC<CarouselProps> = ({
   const [transLeftOffset, setTransLeftOffset] = useState(0);
   const [walk, setWalk] = useState(0);
   const [drag, setDrag] = useState(false);
+  if (slide) slide.ondragstart = () => false;
 
   const handleMouseDown = (event: React.MouseEvent<HTMLElement>) => {
     setPressed(true);
@@ -366,6 +367,7 @@ const Carousel: React.FC<CarouselProps> = ({
       const walk = mouseMovedDistance * slideSpeed * -1;
 
       slide.style.transform = `translateX(${-walk + transLeftOffset}px)`;
+
       setWalk(walk);
       setDrag(true);
     }
