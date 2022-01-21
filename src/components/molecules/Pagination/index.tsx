@@ -53,7 +53,7 @@ const PaginationCircle = styled.div`
 
 interface PaginationProps extends React.HTMLAttributes<HTMLDivElement> {
   paginationType?: "number" | "circle";
-  active: number;
+  pageIndex: number;
   slidesPerView: number;
   childrenCount: number;
   onClickPaginationHandler?: (index: number) => void;
@@ -61,20 +61,20 @@ interface PaginationProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const Pagination: React.FC<PaginationProps> = ({
   paginationType,
-  active,
+  pageIndex,
   slidesPerView,
   childrenCount,
   onClickPaginationHandler = () => {},
   className,
 }) => {
   const pages = childrenCount - slidesPerView + 1;
-  const currentPage = active + 1;
+  const currentPage = pageIndex + 1;
   const currentPageString = pageNumberToString(currentPage);
   const lastPageString = pageNumberToString(pages);
 
   const array = Array.from(Array(pages).keys());
   const circleOrNot = (index: number) => {
-    if (active === index) return "longCircle";
+    if (pageIndex === index) return "longCircle";
     else return "";
   };
 

@@ -322,7 +322,7 @@ const CarouselTopBanner: React.FC<BannerProps> = ({ array }) => {
                   className="number"
                   paginationType="number"
                   slidesPerView={1}
-                  active={page}
+                  pageIndex={page}
                   childrenCount={lastIndex + 1}
                   onClickPaginationHandler={() => {}}
                 />

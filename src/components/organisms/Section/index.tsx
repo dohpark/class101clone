@@ -2,7 +2,7 @@ import styled from "styled-components";
 import palette from "../../../styles/palette";
 import TextButton from "../../atoms/TextButton";
 
-const SectionContainer = styled.div`
+const SectionContainer = styled.section`
   margin-bottom: 72px;
 
   @media screen and (max-width: 1024px) {

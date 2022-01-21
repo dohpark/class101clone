@@ -5,26 +5,64 @@ import useWindowDimensions from "../../../hooks/useWindowDimensions";
 import IconButton from "../../atoms/IconButton";
 import Pagination from "../Pagination";
 
-interface StyledSlideProps {
-  slidesView: number;
-  count: number;
-  type: "banner" | "popular" | "default";
+// general type
+type carouselTypes = "banner" | "popular" | "default";
+type navPosition = "rightIn" | "eachSide";
+
+// css types
+interface StyledSlideContainer {
+  slidesPerView: number;
+  slidesCount: number;
+  type: carouselTypes;
 }
 
-interface StyledButtonProps {
-  navPosition: "rightIn" | "eachSide";
+interface StyledButtonContainer {
+  navPosition: navPosition;
 }
 
-interface StyledOuterContainer {
-  navPosition: "rightIn" | "eachSide";
-  type: "popular" | "banner" | "default";
+interface StyledCarouselOuterContainer {
+  navPosition: navPosition;
+  type: carouselTypes;
 }
 
-interface StyledInnerContainer {
-  type: "popular" | "banner" | "default";
+interface StyledCarouselInnerContainer {
+  type: carouselTypes;
 }
 
-const getWidthPercentage = (type: "popular" | "banner" | "default") => {
+// function component type
+interface CarouselProps extends React.HTMLAttributes<HTMLDivElement> {
+  type?: carouselTypes;
+  slidesPerView: number;
+  navPosition: navPosition;
+  paginationType?: "circle" | "number";
+  autoplay?: boolean;
+  children: React.ReactNode;
+  buttonBackgroundColor?: "black" | "white" | "transparent";
+  buttonIconColor?: "black" | "white";
+}
+
+// const
+const SLIDE_MARGIN = 15;
+
+// prop function
+const slidesPerViewWidth = (slidesPerView: number, slidesCount: number) => {
+  if (slidesCount < slidesPerView) {
+    return css`
+      width: calc(
+        (100% - ${SLIDE_MARGIN}px * ${slidesPerView - 1}) / ${slidesPerView}
+      );
+    `;
+  } else {
+    return css`
+      min-width: calc(
+        (100% - ${SLIDE_MARGIN}px * ${slidesPerView - 1}) / ${slidesPerView}
+      );
+    `;
+  }
+};
+
+// css function
+const getWidthPercentage = (type: carouselTypes) => {
   switch (type) {
     case "banner":
       return css`
@@ -37,19 +75,7 @@ const getWidthPercentage = (type: "popular" | "banner" | "default") => {
   }
 };
 
-const SlidesViewWidth = (slidesView: number, count: number) => {
-  if (count < slidesView) {
-    return css`
-      width: calc((100% - 20px * ${slidesView - 1}) / ${slidesView});
-    `;
-  } else {
-    return css`
-      min-width: calc((100% - 20px * ${slidesView - 1}) / ${slidesView});
-    `;
-  }
-};
-
-const getNavPosition = (navPosition: "rightIn" | "eachSide") => {
+const getNavPosition = (navPosition: navPosition) => {
   switch (navPosition) {
     case "rightIn":
       return css`
@@ -145,7 +171,8 @@ const getInnerContainerResponsiveStyle = (
   }
 };
 
-const EachSideContainer = styled.div<StyledOuterContainer>`
+// styled components
+const CarouselOuterContainer = styled.div<StyledCarouselOuterContainer>`
   margin: auto;
   width: 100%;
   ${(props) =>
@@ -169,7 +196,7 @@ const EachSideContainer = styled.div<StyledOuterContainer>`
   }
 `;
 
-const CarouselContainer = styled.div<StyledInnerContainer>`
+const CarouselInnerContainer = styled.div<StyledCarouselInnerContainer>`
   width: 100%;
   overflow: hidden;
   position: relative;
@@ -182,7 +209,7 @@ const CarouselContainer = styled.div<StyledInnerContainer>`
   }
 `;
 
-const SlideProps = styled.section<StyledSlideProps>`
+const SlideContainer = styled.div<StyledSlideContainer>`
   width: 100%;
   display: flex;
   transition: transform 0.5s ease-in-out;
@@ -194,143 +221,153 @@ const SlideProps = styled.section<StyledSlideProps>`
   }
 
   > div {
-    ${(props) => SlidesViewWidth(props.slidesView, props.count)};
-    margin: 0 20px 0 0;
+    ${(props) => slidesPerViewWidth(props.slidesPerView, props.slidesCount)};
+    margin: 0 ${SLIDE_MARGIN}px 0 0;
     position: relative;
     left: 0;
   }
 `;
 
-const ButtonProps = styled.div<StyledButtonProps>`
+const ButtonContainer = styled.div<StyledButtonContainer>`
   ${(props) => getNavPosition(props.navPosition)};
 `;
 
-interface CarouselProps extends React.HTMLAttributes<HTMLDivElement> {
-  type?: "banner" | "popular" | "default";
-  slidesView: number;
-  navPosition: "rightIn" | "eachSide";
-  paginationType?: "circle" | "number";
-  autoplay?: boolean;
-  children: React.ReactNode;
-  iconBackgroundColor?: "black" | "white" | "transparent";
-  iconColor?: "black" | "white";
-}
-
 const Carousel: React.FC<CarouselProps> = ({
   type = "default",
-  slidesView,
+  slidesPerView,
   navPosition,
   paginationType,
   autoplay = false,
-  iconBackgroundColor = "transparent",
-  iconColor = "black",
+  buttonBackgroundColor = "transparent",
+  buttonIconColor = "black",
   children,
 }) => {
-  const count = Children.count(children);
-  let paginationActive: boolean;
+  const slidesCount = Children.count(children);
 
-  if (paginationType === "circle") paginationActive = true;
-  else paginationActive = false;
+  // responsiveSlidesPerView
+  const defaultSlidesPerView = 2;
+  const popularSlidesPerView = 1;
+  const bannerSlidesPerView = 1;
 
-  // slidesPerViewResponsive
   const { innerWidth } = useWindowDimensions();
-  if (innerWidth <= 1024 && type !== "banner") slidesView = 2;
-  if (innerWidth <= 1024 && type === "popular") slidesView = 1;
+  if (innerWidth <= 1024 && type === "default")
+    slidesPerView = defaultSlidesPerView;
+  if (innerWidth <= 1024 && type === "popular")
+    slidesPerView = popularSlidesPerView;
+  if (innerWidth <= 1024 && type === "banner")
+    slidesPerView = bannerSlidesPerView;
 
-  // button disabled
-  const leftButtonDisabled = () => {
-    if (autoplay) return false;
-    if (active === 0) return true;
-  };
-  const rightButtonDisabled = () => {
-    if (autoplay) return false;
-    if (active === count - slidesView) return true;
-  };
+  // swipe effect
+  const [slideIndex, setSlideIndex] = useState(0);
+  const maxSlideIndex = slidesCount - slidesPerView;
+  const slideRef = useRef<HTMLDivElement>(null);
+  const slide = slideRef.current;
+
+  // 화면 크기 변화 대응
+  useEffect(() => {
+    if (slide) {
+      slide.style.transition = "transform 0s cubic-bezier(1,-0.01, 1, 1)";
+
+      if (slideIndex > maxSlideIndex) setSlideIndex(maxSlideIndex);
+      const width =
+        ((slide.offsetWidth + SLIDE_MARGIN) / slidesPerView) * slideIndex;
+
+      slide.style.transform = `translateX(-${width}px)`;
+
+      const transX = Number(slide.style.transform.replace(/[^0-9.-]/g, ""));
+      setTransLeftOffset(transX);
+    }
+  }, [innerWidth, maxSlideIndex, slide, slideIndex, slidesPerView]);
+
+  // pageIndex 변화 대응
+  useEffect(() => {
+    if (slide) {
+      slide.style.transition = "transform 0.5s ease-in";
+      const width =
+        ((slide.offsetWidth + SLIDE_MARGIN) / slidesPerView) * slideIndex;
+
+      slide.style.transform = `translateX(-${width}px)`;
+
+      const transX = Number(slide.style.transform.replace(/[^0-9.-]/g, ""));
+      setTransLeftOffset(transX);
+    }
+  }, [slideIndex, slidesPerView, slide]);
 
   // click event
   const onClickLeft = (event: React.MouseEvent<HTMLElement>) => {
     if (autoplay) {
-      setActive(active - 1);
-      if (active <= 0) {
-        setActive(count - slidesView);
+      setSlideIndex(slideIndex - 1);
+      if (slideIndex <= 0) {
+        setSlideIndex(slidesCount - slidesPerView);
       }
     } else {
-      if (active === 0) return;
-      setActive(active - 1);
+      if (slideIndex === 0) return;
+      setSlideIndex(slideIndex - 1);
     }
   };
   const onClickRight = (event: React.MouseEvent<HTMLElement>) => {
     if (autoplay) {
-      setActive(active + 1);
-      if (active > count - slidesView - 1) {
-        setActive(0);
+      setSlideIndex(slideIndex + 1);
+      if (slideIndex > slidesCount - slidesPerView - 1) {
+        setSlideIndex(0);
       }
     } else {
-      if (count < slidesView) return;
-      if (active === count - slidesView) return;
-      setActive(active + 1);
+      if (slidesCount < slidesPerView) return;
+      if (slideIndex === slidesCount - slidesPerView) return;
+      setSlideIndex(slideIndex + 1);
     }
   };
-  // pagination
-  const onClickPaginationHandler = (index: number) => {
-    setActive(index);
+
+  // button disabled
+  const leftButtonDisabled = () => {
+    if (autoplay) return false;
+    if (slideIndex === 0) return true;
   };
-
-  // swipe effect
-  const [active, setActive] = useState(0);
-  const slideRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const { current } = slideRef;
-    if (current != null) {
-      let margin = 20;
-      const width = ((current.offsetWidth + margin) / slidesView) * active;
-      current.style.transform = `translateX(-${width}px)`;
-
-      const transX = Number(current.style.transform.replace(/[^0-9.-]/g, ""));
-      setTransLeftOffset(transX);
-    }
-  }, [active, slidesView, innerWidth]);
+  const rightButtonDisabled = () => {
+    if (autoplay) return false;
+    if (slideIndex === slidesCount - slidesPerView) return true;
+  };
 
   // autoplay
   useEffect(() => {
     const id = setInterval(() => {
       if (autoplay) {
-        setActive(active + 1);
-        if (active > count - slidesView - 1) {
-          setActive(0);
+        setSlideIndex(slideIndex + 1);
+        if (slideIndex > slidesCount - slidesPerView - 1) {
+          setSlideIndex(0);
         }
       }
     }, 5 * 1000);
     return () => clearInterval(id);
-  }, [active, autoplay, count, slidesView]);
+  }, [slideIndex, autoplay, slidesCount, slidesPerView]);
 
   // drag & scroll
   const [pressed, setPressed] = useState(false);
-  const [startX, setStartX] = useState(0);
+  const [startCoordinate, setStartCoordinate] = useState(0);
   const [transLeftOffset, setTransLeftOffset] = useState(0);
   const [walk, setWalk] = useState(0);
-  const slide = slideRef.current;
-  if (slide) slide.ondragstart = () => false;
+  const [drag, setDrag] = useState(false);
 
   const handleMouseDown = (event: React.MouseEvent<HTMLElement>) => {
     setPressed(true);
     if (slide) {
       slide.style.cursor = "grabbing";
       slide.style.transition = "transform 0s cubic-bezier(1,-0.01, 1, 1)";
-      setStartX(event.pageX);
+      setStartCoordinate(event.pageX);
+      setDrag(false);
     }
   };
 
   const handleMouseMove = (event: React.MouseEvent<HTMLElement>) => {
-    if (pressed && slide && startX) {
-      const x = event.pageX - startX;
-      const speed = 0.8;
+    if (pressed && slide && startCoordinate) {
+      const mouseMovedDistance = event.pageX - startCoordinate;
+      const slideSpeed = 0.8;
 
-      const walk = x * speed * -1;
+      const walk = mouseMovedDistance * slideSpeed * -1;
 
       slide.style.transform = `translateX(${-walk + transLeftOffset}px)`;
       setWalk(walk);
+      setDrag(true);
     }
   };
 
@@ -339,18 +376,17 @@ const Carousel: React.FC<CarouselProps> = ({
       slide.style.cursor = "grab";
       slide.style.transition = "transform 0.5s ease-in";
 
-      let margin = 20;
-      const widthPerSlide = (slide.offsetWidth + margin) / slidesView;
-      const round = Math.round(walk / widthPerSlide);
+      const widthPerSlide = (slide.offsetWidth + SLIDE_MARGIN) / slidesPerView;
+      const swipePageCount = Math.round(walk / widthPerSlide);
 
-      if (round === 0) {
-        slide.style.transform = `translateX(-${widthPerSlide * active}px)`;
+      if (swipePageCount === 0) {
+        slide.style.transform = `translateX(-${widthPerSlide * slideIndex}px)`;
         setWalk(0);
       }
-      if (round !== 0) {
-        setActive(active + round);
+      if (swipePageCount !== 0) {
+        setSlideIndex(slideIndex + swipePageCount);
         slide.style.transform = `translateX(-${
-          widthPerSlide * (active + round)
+          widthPerSlide * (slideIndex + swipePageCount)
         }px)`;
         setWalk(0);
       }
@@ -358,20 +394,22 @@ const Carousel: React.FC<CarouselProps> = ({
       const transX = Number(slide.style.transform.replace(/[^0-9.-]/g, ""));
       setTransLeftOffset(transX);
 
-      // 첫번째 슬라이드에서 왼쪽으로 넘길려 할때
+      // 첫번째 슬라이드에서 왼쪽으로 넘길려 할때 제어
       if (transX > 0) {
         slide.style.transform = `translateX(0px)`;
-        setActive(0);
+        setSlideIndex(0);
         setWalk(0);
         setTransLeftOffset(0);
       }
 
-      // 마지막 슬라이드에서 오른쪽으로 넘길려 할때
+      // 마지막 슬라이드에서 오른쪽으로 넘길려 할때 제어
       const maxTransX =
-        ((slide.offsetWidth + margin) / slidesView) * (count - slidesView) * -1;
+        ((slide.offsetWidth + SLIDE_MARGIN) / slidesPerView) *
+        (slidesCount - slidesPerView) *
+        -1;
       if (transX < maxTransX) {
         slide.style.transform = `translateX(${maxTransX}px)`;
-        setActive(count - slidesView);
+        setSlideIndex(slidesCount - slidesPerView);
         setWalk(0);
         setTransLeftOffset(maxTransX);
       }
@@ -387,30 +425,26 @@ const Carousel: React.FC<CarouselProps> = ({
   };
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    event.preventDefault();
+    if (drag) event.preventDefault();
   };
 
-  // children clone
-  // const childrenWithProps = Children.map(children, (child) => {
-  //   if (isValidElement(child)) {
-  //     return cloneElement(child, {
-  //       slidesView,
-  //       active,
-  //       count,
-  //       onClickPaginationHandler,
-  //     });
-  //   }
-  //   return child;
-  // });
+  // pagination
+  let paginationActive: boolean;
+  if (paginationType) paginationActive = true;
+  else paginationActive = false;
+
+  const onClickPaginationHandler = (index: number) => {
+    setSlideIndex(index);
+  };
 
   return (
-    <EachSideContainer navPosition={navPosition} type={type}>
+    <CarouselOuterContainer navPosition={navPosition} type={type}>
       {navPosition === "eachSide" && (
         <IconButton
           className="leftButton"
           iconName="ChevronLeft"
-          fillColor={iconColor}
-          backgroundColor={iconBackgroundColor}
+          fillColor={buttonIconColor}
+          backgroundColor={buttonBackgroundColor}
           onClick={onClickLeft}
           disabled={leftButtonDisabled()}
         />
@@ -419,13 +453,13 @@ const Carousel: React.FC<CarouselProps> = ({
         <IconButton
           className="rightButton"
           iconName="ChevronRight"
-          fillColor={iconColor}
-          backgroundColor={iconBackgroundColor}
+          fillColor={buttonIconColor}
+          backgroundColor={buttonBackgroundColor}
           onClick={onClickRight}
           disabled={rightButtonDisabled()}
         />
       )}
-      <CarouselContainer
+      <CarouselInnerContainer
         onMouseDown={handleMouseDown}
         onMouseLeave={handleMouseLeave}
         onMouseUp={handleMouseUp}
@@ -433,46 +467,46 @@ const Carousel: React.FC<CarouselProps> = ({
         onClick={handleClick}
         type={type}
       >
-        <SlideProps
-          slidesView={slidesView}
-          count={count}
+        <SlideContainer
+          slidesPerView={slidesPerView}
+          slidesCount={slidesCount}
           ref={slideRef}
           type={type}
         >
           {children}
-        </SlideProps>
+        </SlideContainer>
         {navPosition !== "eachSide" && (
-          <ButtonProps navPosition={navPosition}>
+          <ButtonContainer navPosition={navPosition}>
             <IconButton
               className="leftButton"
               iconName="ChevronLeft"
-              fillColor={iconColor}
-              backgroundColor={iconBackgroundColor}
+              fillColor={buttonIconColor}
+              backgroundColor={buttonBackgroundColor}
               onClick={onClickLeft}
               disabled={leftButtonDisabled()}
             />
             <IconButton
               className="rightButton"
               iconName="ChevronRight"
-              fillColor={iconColor}
-              backgroundColor={iconBackgroundColor}
+              fillColor={buttonIconColor}
+              backgroundColor={buttonBackgroundColor}
               onClick={onClickRight}
               disabled={rightButtonDisabled()}
             />
-          </ButtonProps>
+          </ButtonContainer>
         )}
-      </CarouselContainer>
+      </CarouselInnerContainer>
       {paginationActive && (
         <Pagination
           className="circle"
           paginationType={paginationType}
-          slidesPerView={slidesView}
-          active={active}
-          childrenCount={count}
+          slidesPerView={slidesPerView}
+          pageIndex={slideIndex}
+          childrenCount={slidesCount}
           onClickPaginationHandler={onClickPaginationHandler}
         />
       )}
-    </EachSideContainer>
+    </CarouselOuterContainer>
   );
 };
 
