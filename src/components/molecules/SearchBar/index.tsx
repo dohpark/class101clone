@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import palette from "../../../styles/palette";
 import IconButton from "../../atoms/IconButton";
 import SearchBarModal from "../../organisms/SearchBarModal";
+import useModal from "../../../hooks/useModal";
 
 // type
 interface SearchBarProps {
@@ -42,33 +43,22 @@ const SearchBarInput = styled.input`
 `;
 
 const SearchBar: React.FC<SearchBarProps> = ({ placeholder, modal }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  let windowOffsetY: number;
-  const openModal = () => {
-    setIsOpen(true);
-    windowOffsetY = window.scrollY;
-    document.body.setAttribute(
-      "style",
-      `position: fixed; top: ${windowOffsetY}px; left: 0; right: 0;`
-    );
-  };
-
-  const closeModal = () => {
-    setIsOpen(false);
-    document.body.setAttribute("style", "margin: 0");
-    window.scrollTo(0, windowOffsetY);
-  };
+  const { openModal, closeModal, ModalPortal } = useModal();
 
   return (
     <SearchBarForm action="#">
       <SearchBarInput
         type="search"
         placeholder={placeholder}
-        onClick={openModal}
+        onClick={() => openModal()}
       />
       <IconButton iconName="Search" fillColor="black" className="searchIcon" />
-      {modal && <SearchBarModal isOpen={isOpen} closeModal={closeModal} />}
+
+      {modal && (
+        <ModalPortal>
+          <SearchBarModal closeModal={closeModal} />
+        </ModalPortal>
+      )}
     </SearchBarForm>
   );
 };
