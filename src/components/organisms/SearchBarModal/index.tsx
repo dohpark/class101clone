@@ -290,7 +290,7 @@ const SearchBarModal: React.FC<SearchBarModalProps> = ({ closeModal }) => {
 
             <RecentSearchItem>
               {searchedWords.map((value, index) => (
-                <RecentSearchItem>
+                <RecentSearchItem key={value}>
                   <IconButton
                     className="closeButton"
                     iconName="Close"

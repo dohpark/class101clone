@@ -45,10 +45,10 @@ const getDTime = () => {
   let minute = localTime.getMinutes();
   let second = localTime.getSeconds();
 
-  const now: any = new Date(`1997-3-10 ${hour}:${minute}:${second}`);
-  const dTime: any = new Date(`1997-3-11 00:00:00`);
+  const now = new Date(`1997-3-10 ${hour}:${minute}:${second}`);
+  const dTime = new Date(`1997-3-11 00:00:00`);
 
-  const timeGap = dTime - now;
+  const timeGap = dTime.valueOf() - now.valueOf();
   let dHour = Math.floor(
     (timeGap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
   ).toString();
