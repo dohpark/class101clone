@@ -2,6 +2,15 @@ import styled from "styled-components";
 import palette from "../../../styles/palette";
 import TextButton from "../../atoms/TextButton";
 
+// type
+interface SectionProps {
+  title: string;
+  subTitle?: string;
+  button?: boolean;
+  children: React.ReactNode;
+}
+
+// styled-components
 const SectionContainer = styled.section`
   margin-bottom: 72px;
 
@@ -22,7 +31,7 @@ const SectionContainer = styled.section`
   }
 `;
 
-const Header = styled.div`
+const SectionHeader = styled.div`
   margin: auto;
   display: flex;
   justify-content: space-between;
@@ -49,13 +58,6 @@ const SubTitle = styled.p`
   color: ${palette.gray600};
 `;
 
-interface SectionProps {
-  title: string;
-  subTitle?: string;
-  button?: boolean;
-  children: React.ReactNode;
-}
-
 const Section: React.FC<SectionProps> = ({
   title,
   subTitle,
@@ -64,7 +66,7 @@ const Section: React.FC<SectionProps> = ({
 }) => {
   return (
     <SectionContainer>
-      <Header>
+      <SectionHeader>
         <div>
           <Title>{title}</Title>
           {subTitle && <SubTitle>{subTitle}</SubTitle>}
@@ -74,7 +76,7 @@ const Section: React.FC<SectionProps> = ({
             전체 클래스 보기
           </TextButton>
         )}
-      </Header>
+      </SectionHeader>
       {children}
     </SectionContainer>
   );

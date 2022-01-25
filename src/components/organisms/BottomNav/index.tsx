@@ -3,6 +3,7 @@ import palette from "../../../styles/palette";
 import Button from "../../atoms/Button";
 import Icon from "../../atoms/Icon";
 
+// styled-components
 const BottomNavContainer = styled.nav`
   position: fixed;
   bottom: 0;

@@ -5,6 +5,7 @@ import SearchBar from "../../molecules/SearchBar";
 import useWindowDimensions from "../../../hooks/useWindowDimensions";
 import { useEffect, useState } from "react";
 
+// styled-components
 const HeaderContainer = styled.header`
   display: flex;
   align-items: center;
@@ -137,12 +138,12 @@ const ButtonWrapper = styled.div`
 `;
 
 const Header = () => {
-  const [changeSearchBar, setChangeSearchBar] = useState(false);
+  const [smallSearchBar, setSmallSearchBar] = useState(false);
   const { innerWidth } = useWindowDimensions();
 
   useEffect(() => {
-    if (innerWidth <= 1240) setChangeSearchBar(true);
-    else setChangeSearchBar(false);
+    if (innerWidth <= 1240) setSmallSearchBar(true);
+    else setSmallSearchBar(false);
   }, [innerWidth]);
 
   return (
@@ -155,10 +156,10 @@ const Header = () => {
         <Button className="store">스토어</Button>
       </ClassStoreWrapper>
       <SearchWrapper>
-        {changeSearchBar && (
+        {smallSearchBar && (
           <SearchBar placeholder={"검색어 입력"} modal={true} />
         )}
-        {!changeSearchBar && (
+        {!smallSearchBar && (
           <SearchBar placeholder={"찾으시는 취미가 있으신가요?"} modal={true} />
         )}
       </SearchWrapper>

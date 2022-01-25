@@ -8,6 +8,12 @@ import { recommendSearch, popularSearchTerm } from "../../../data/data";
 import TextButton from "../../atoms/TextButton";
 import IconButton from "../../atoms/IconButton";
 
+// type
+interface SearchBarModalProps {
+  closeModal: () => void;
+}
+
+// function
 const getHour = () => {
   const localTime = new Date();
   let hour = localTime.getHours().toString();
@@ -19,6 +25,7 @@ const getHour = () => {
   return hour;
 };
 
+// styled-components
 const SearchModalContainer = styled.div`
   width: 100%;
   background-color: ${palette.white};
@@ -209,10 +216,6 @@ const CandidateName = styled.span`
     font-weight: bold;
   }
 `;
-
-interface SearchBarModalProps {
-  closeModal: () => void;
-}
 
 const SearchBarModal: React.FC<SearchBarModalProps> = ({ closeModal }) => {
   // localstorage

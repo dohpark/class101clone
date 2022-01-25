@@ -2,14 +2,17 @@ import React from "react";
 import styled, { css } from "styled-components";
 import palette from "../../../styles/palette";
 
+// type
+type size = "xs" | "sm" | "md";
+
 interface StyledBadgeProps {
-  size: "xs" | "sm" | "md";
+  size: size;
   color?: string;
   backgroundColor?: string;
 }
 
 interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
-  size: "xs" | "sm" | "md";
+  size: size;
   color?: string;
   backgroundColor?: string;
   children: React.ReactNode;
