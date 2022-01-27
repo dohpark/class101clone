@@ -430,6 +430,33 @@ const Carousel: React.FC<CarouselProps> = ({
   };
 
   // touch drag
+  const handleTouchStart = (event: React.TouchEvent<HTMLElement>) => {
+    setPressed(true);
+    if (slide) {
+      slide.style.cursor = "grabbing";
+      slide.style.transition = "transform 0s cubic-bezier(1,-0.01, 1, 1)";
+      setStartCoordinate(event.targetTouches[0].pageX);
+      setDrag(false);
+    }
+  };
+
+  const handleTouchMove = (event: React.TouchEvent<HTMLElement>) => {
+    if (pressed && slide && startCoordinate) {
+      const mouseMovedDistance = event.targetTouches[0].pageX - startCoordinate;
+      const slideSpeed = 0.8;
+
+      const walk = mouseMovedDistance * slideSpeed * -1;
+
+      slide.style.transform = `translateX(${-walk + transLeftOffset}px)`;
+
+      setWalk(walk);
+      setDrag(true);
+    }
+  };
+
+  const handleTouchEnd = (event: React.TouchEvent<HTMLElement>) => {
+    handleMouseUpAndLeave();
+  };
 
   // pagination
   let paginationActive: boolean;
@@ -467,6 +494,9 @@ const Carousel: React.FC<CarouselProps> = ({
         onMouseLeave={handleMouseLeave}
         onMouseUp={handleMouseUp}
         onMouseMove={handleMouseMove}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
         onClick={handleClick}
         type={type}
       >
