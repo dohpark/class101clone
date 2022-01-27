@@ -8,6 +8,26 @@ import Pagination from "../Pagination";
 import useProgressBar from "../../atoms/ProgressBar/useProgressBar";
 import useWindowDimensions from "../../../hooks/useWindowDimensions";
 
+// type
+interface ArrayProp {
+  id: number;
+  title: string;
+  subtitle: string;
+  img: string;
+  badge?: string;
+  bgColor: string;
+}
+
+interface BannerProps {
+  array: ArrayProp[];
+}
+
+interface StyledBackgroundColor {
+  page: number;
+  bgColorImgArray: string[][];
+}
+
+// function
 const getBackgroundColor = (bgColorImgArray: string[][], page: number) => {
   const backgroundColor: string = bgColorImgArray[page][0];
 
@@ -16,17 +36,13 @@ const getBackgroundColor = (bgColorImgArray: string[][], page: number) => {
   `;
 };
 
-interface StyledBackgroundColor {
-  page: number;
-  bgColorImgArray: string[][];
-}
-
-const BannerBackground = styled.div`
+// styled-components
+const BannerOuterContainer = styled.div`
   padding-bottom: 34px;
   margin-bottom: 72px;
 `;
 
-const BannerContainer = styled.div<StyledBackgroundColor>`
+const BannerInnerContainer = styled.div<StyledBackgroundColor>`
   ${(props) => getBackgroundColor(props.bgColorImgArray, props.page)}
 `;
 
@@ -168,7 +184,7 @@ const TextContent = styled.div`
   }
 `;
 
-const PBRWrapper = styled.div`
+const PageBarButtonWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: right;
@@ -192,19 +208,6 @@ const PBRWrapper = styled.div`
     margin-right: 20px;
   }
 `;
-
-interface ArrayProp {
-  id: number;
-  title: string;
-  subtitle: string;
-  img: string;
-  badge?: string;
-  bgColor: string;
-}
-
-interface BannerProps {
-  array: ArrayProp[];
-}
 
 const CarouselTopBanner: React.FC<BannerProps> = ({ array }) => {
   // bgColorImg Array
@@ -289,8 +292,8 @@ const CarouselTopBanner: React.FC<BannerProps> = ({ array }) => {
   }, [page]);
 
   return (
-    <BannerBackground>
-      <BannerContainer bgColorImgArray={bgColorImgArray} page={page}>
+    <BannerOuterContainer>
+      <BannerInnerContainer bgColorImgArray={bgColorImgArray} page={page}>
         <BannerWrapper>
           <ImageCarouselContainer>
             <SlideProps ref={slideRef}>
@@ -317,12 +320,12 @@ const CarouselTopBanner: React.FC<BannerProps> = ({ array }) => {
                 <p className="title">{title}</p>
                 <p className="subtitle">{subtitle}</p>
               </div>
-              <PBRWrapper>
+              <PageBarButtonWrapper>
                 <Pagination
                   className="number"
                   paginationType="number"
                   slidesPerView={1}
-                  active={page}
+                  pageIndex={page}
                   childrenCount={lastIndex + 1}
                   onClickPaginationHandler={() => {}}
                 />
@@ -341,12 +344,12 @@ const CarouselTopBanner: React.FC<BannerProps> = ({ array }) => {
                   backgroundColor="transparent"
                   onClick={onClickRight}
                 />
-              </PBRWrapper>
+              </PageBarButtonWrapper>
             </TextContent>
           </TextWrapper>
         </BannerWrapper>
-      </BannerContainer>
-    </BannerBackground>
+      </BannerInnerContainer>
+    </BannerOuterContainer>
   );
 };
 

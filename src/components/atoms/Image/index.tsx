@@ -1,6 +1,7 @@
 import React from "react";
 import styled, { css } from "styled-components";
 
+// type
 interface ImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   src: string;
   alt: string;
@@ -11,6 +12,7 @@ interface StyledImageProps {
   expand: boolean;
 }
 
+// function
 const getExpandState = (expand: boolean) => {
   return expand
     ? css`
@@ -19,6 +21,7 @@ const getExpandState = (expand: boolean) => {
     : css``;
 };
 
+// styled-components
 const ImageBox = styled.img.attrs<ImageProps>((props) => ({
   src: props.src,
   alt: props.alt,

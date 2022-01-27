@@ -2,13 +2,20 @@ import styled from "styled-components";
 import palette from "../../../styles/palette";
 import Image from "../../atoms/Image";
 
+// type
+interface BannerProps {
+  title: string;
+  subtitle: string;
+  img: string;
+  bgColor: string;
+}
+
 interface StyledBannerContainer {
   bgColor: string;
 }
 
-interface StyledType {}
-
-const BannerBackground = styled.div<StyledType>`
+// styled-components
+const BannerOuterContainer = styled.div`
   padding-top: 34px;
 
   a {
@@ -17,7 +24,7 @@ const BannerBackground = styled.div<StyledType>`
   }
 `;
 
-const BannerContainer = styled.div<StyledBannerContainer>`
+const BannerInnerContainer = styled.div<StyledBannerContainer>`
   background-color: ${(props) => props.bgColor};
   display: flex;
   flex-wrap: wrap-reverse;
@@ -28,7 +35,7 @@ const BannerContainer = styled.div<StyledBannerContainer>`
   }
 `;
 
-const BannerWrapper = styled.div<StyledType>`
+const BannerWrapper = styled.div`
   width: 100%;
   margin-left: auto;
   margin-right: auto;
@@ -52,7 +59,7 @@ const BannerWrapper = styled.div<StyledType>`
   }
 `;
 
-const ImageWrapper = styled.div<StyledType>`
+const ImageContainer = styled.div`
   position: absolute;
   right: 0;
   bottom: -1px;
@@ -61,7 +68,7 @@ const ImageWrapper = styled.div<StyledType>`
   z-index: 0;
 `;
 
-const TextWrapper = styled.div<StyledType>`
+const TextContainer = styled.div`
   display: flex;
   align-items: left;
   flex-direction: column;
@@ -108,50 +115,24 @@ const TextWrapper = styled.div<StyledType>`
   }
 `;
 
-interface BannerProps {
-  title: string;
-  subtitle: string;
-  img: string;
-  badge?: string;
-  bgColor: string;
-  slidesView?: number;
-  active?: number;
-  count?: number;
-  onClickPaginationHandler?: (index: number) => void;
-}
-
-const Banner: React.FC<BannerProps> = ({
-  title,
-  subtitle,
-  img,
-  badge,
-  bgColor,
-  slidesView = 0,
-  active = 0,
-  count = 0,
-  onClickPaginationHandler = () => {},
-}) => {
-  if (bgColor === "") {
-    bgColor = `${palette.gray700}`;
-  }
-
+const Banner: React.FC<BannerProps> = ({ title, subtitle, img, bgColor }) => {
   return (
-    <BannerBackground>
+    <BannerOuterContainer>
       <a target="slide" href="https://github.com/dohpark/class101clone">
-        <BannerContainer bgColor={bgColor}>
+        <BannerInnerContainer bgColor={bgColor}>
           <BannerWrapper>
-            <TextWrapper>
+            <TextContainer>
               <div className="title">{title}</div>
               <div className="subtitle">{subtitle}</div>
               <div className="button">더 알아보기</div>
-            </TextWrapper>
-            <ImageWrapper>
+            </TextContainer>
+            <ImageContainer>
               <Image src={img} alt={title} expand={false} />
-            </ImageWrapper>
+            </ImageContainer>
           </BannerWrapper>
-        </BannerContainer>
+        </BannerInnerContainer>
       </a>
-    </BannerBackground>
+    </BannerOuterContainer>
   );
 };
 

@@ -29,7 +29,11 @@ function App() {
       <Nav />
       <CarouselTopBanner array={topEvent.top_event} />
       <Section title={"오늘의 특가! TIME DEAL"} button={true}>
-        <Carousel slidesView={4} navPosition="eachSide" iconColor="black">
+        <Carousel
+          slidesPerView={4}
+          navPosition="eachSide"
+          buttonIconColor="black"
+        >
           {timeDeal.time_deal.map(
             ({ id, title, creator, img, like, thumsUp, price, coupon }) => (
               <Card
@@ -48,7 +52,11 @@ function App() {
         </Carousel>
       </Section>
       <Section title={"MD 추천 클래스"}>
-        <Carousel slidesView={4} navPosition="eachSide" iconColor="black">
+        <Carousel
+          slidesPerView={4}
+          navPosition="eachSide"
+          buttonIconColor="black"
+        >
           {mdRecommend.md_recommend.map(
             ({ id, title, creator, img, like, thumsUp, price, coupon }) => (
               <Card
@@ -69,10 +77,10 @@ function App() {
       <BannerContainer>
         <Carousel
           type="banner"
-          slidesView={1}
+          slidesPerView={1}
           navPosition="rightIn"
-          iconColor="black"
-          iconBackgroundColor="white"
+          buttonIconColor="black"
+          buttonBackgroundColor="white"
           paginationType="circle"
         >
           {bottomEvent.bottom_event.map(
@@ -93,7 +101,11 @@ function App() {
         subTitle={"오픈 예정인 클래스를 응원하면 얼리버드 오픈 시 알려드려요!"}
         button={true}
       >
-        <Carousel slidesView={4} navPosition="eachSide" iconColor="black">
+        <Carousel
+          slidesPerView={4}
+          navPosition="eachSide"
+          buttonIconColor="black"
+        >
           {openSoon.open_soon.map(({ id, title, creator, img, cheer }) => (
             <Card
               type="openSoon"
@@ -112,9 +124,9 @@ function App() {
         button={true}
       >
         <Carousel
-          slidesView={3}
+          slidesPerView={3}
           navPosition="eachSide"
-          iconColor="black"
+          buttonIconColor="black"
           type="popular"
         >
           {popularEvent.popular_event.map(({ id, title, img, period }) => (

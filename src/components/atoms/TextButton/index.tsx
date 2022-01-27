@@ -1,6 +1,23 @@
 import styled, { css } from "styled-components";
 import palette from "../../../styles/palette";
 
+// type
+type color = "default" | "orange" | "orangeLight" | "black";
+type size = "md" | "lg";
+
+interface StyledTextButtonProps {
+  color: color;
+  size: size;
+}
+
+interface TextButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  children: React.ReactNode;
+  color?: color;
+  size?: size;
+}
+
+// function
 const getButtonColor = (color: string) => {
   switch (color) {
     case "orange":
@@ -37,12 +54,8 @@ const getButtonSize = (size: "md" | "lg") => {
   }
 };
 
-interface StyledTextButtonProps {
-  color: "default" | "orange" | "orangeLight" | "black";
-  size: "md" | "lg";
-}
-
-const TextButtonBox = styled.button<StyledTextButtonProps>`
+// styled-components
+const TextButtonContainer = styled.button<StyledTextButtonProps>`
   border: 0px;
   outline: none;
   margin: 0px;
@@ -60,15 +73,6 @@ const TextButtonBox = styled.button<StyledTextButtonProps>`
   }
 `;
 
-const TextButtonSpan = styled.span``;
-
-interface TextButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  children: React.ReactNode;
-  color?: "default" | "orange" | "orangeLight" | "black";
-  size?: "md" | "lg";
-}
-
 const TextButton: React.FC<TextButtonProps> = ({
   children,
   color = "default",
@@ -77,14 +81,14 @@ const TextButton: React.FC<TextButtonProps> = ({
   onClick,
 }) => {
   return (
-    <TextButtonBox
+    <TextButtonContainer
       color={color}
       size={size}
       className={className}
       onClick={onClick}
     >
-      <TextButtonSpan>{children}</TextButtonSpan>
-    </TextButtonBox>
+      <span>{children}</span>
+    </TextButtonContainer>
   );
 };
 

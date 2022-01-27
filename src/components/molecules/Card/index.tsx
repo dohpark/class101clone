@@ -7,26 +7,55 @@ import IconButton from "../../atoms/IconButton";
 import Image from "../../atoms/Image";
 import palette from "../../../styles/palette";
 
+// type
+type CardType = "timeDeal" | "mdRecommend" | "openSoon" | "popularEvent";
+
+interface CardProps {
+  type: CardType;
+  title: string;
+  creator?: string;
+  img: string;
+  like?: number | null;
+  thumsUp?: number | null;
+  price?: {
+    originalPrice: number;
+    salePrice: number;
+    installment: number;
+  };
+  cheer?: {
+    goal: number;
+    score: number;
+    finishDate: string;
+  };
+  period?: {
+    startDate: string;
+    finishDate: string;
+  };
+  coupon?: number | null;
+}
+
+interface StyledTextTitle {
+  type: CardType;
+}
+
+// function
 const getDTime = () => {
   const localTime = new Date();
-  let year = localTime.getFullYear();
-  let month = localTime.getMonth() + 1;
-  let date = localTime.getDate() + 1;
   let hour = localTime.getHours();
   let minute = localTime.getMinutes();
   let second = localTime.getSeconds();
 
-  const now: any = new Date(
-    `${year}-${month}-${date} ${hour}:${minute}:${second}`
-  );
-  const dTime: any = new Date(`${year}-${month}-${date + 1} 00:00:00`);
+  const now = new Date(`1997-3-10 ${hour}:${minute}:${second}`);
+  const dTime = new Date(`1997-3-11 00:00:00`);
 
-  const gap = dTime - now;
+  const timeGap = dTime.valueOf() - now.valueOf();
   let dHour = Math.floor(
-    (gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    (timeGap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
   ).toString();
-  let dMinute = Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60)).toString();
-  let dSecond = Math.floor((gap % (1000 * 60)) / 1000).toString();
+  let dMinute = Math.floor(
+    (timeGap % (1000 * 60 * 60)) / (1000 * 60)
+  ).toString();
+  let dSecond = Math.floor((timeGap % (1000 * 60)) / 1000).toString();
 
   const zeroAdder = (time: string) => {
     if (time.length === 1) return `0${time}`;
@@ -36,26 +65,24 @@ const getDTime = () => {
   return [dHour, dMinute, dSecond].map((val) => zeroAdder(val));
 };
 
-const countDDay = (dDay: string) => {
-  let [Dyear, Dmonth, Ddate] = dDay.split(/\.|-/);
+const countDDay = (DDay: string) => {
+  let [Dyear, Dmonth, Ddate] = DDay.split(/\.|-/);
   if (Dyear.length === 2) Dyear = `20${Dyear}`;
 
   const localTime = new Date();
-  let year = localTime.getFullYear();
-  let month = localTime.getMonth() + 1;
-  let date = localTime.getDate() + 1;
+  const [year, month, date] = [
+    localTime.getFullYear(),
+    localTime.getMonth() + 1,
+    localTime.getDate() + 1,
+  ];
 
-  const now: any = new Date(`${year}-${month}-${date}`);
-  const dTime: any = new Date(`${+Dyear}-${+Dmonth}-${+Ddate}`);
+  const today: any = new Date(`${year}-${month}-${date}`);
+  const dDay: any = new Date(`${+Dyear}-${+Dmonth}-${+Ddate}`);
 
-  const gap = dTime - now;
-  if (gap === 0) return "D-Day";
-  const daySecond = 24 * 60 * 60 * 1000;
-  let result = gap / daySecond;
-  return `${result}`;
+  return (dDay - today) / (24 * 60 * 60 * 1000);
 };
 
-const getDay = (yearMonthDate: string) => {
+const getDateAndDay = (yearMonthDate: string) => {
   const days = ["일", "월", "화", "수", "목", "금", "토"];
   let [year, month, date] = yearMonthDate.split(/\.|-/);
 
@@ -69,9 +96,7 @@ const numberWithComma = (won: number) => {
   return won.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
-const getTitleCSS = (
-  type: "timeDeal" | "mdRecommend" | "openSoon" | "popularEvent"
-) => {
+const getTitleCSS = (type: CardType) => {
   switch (type) {
     case "popularEvent":
       return css`
@@ -101,10 +126,7 @@ const getTitleCSS = (
   }
 };
 
-interface StyledTextContainer {
-  type: "timeDeal" | "mdRecommend" | "openSoon" | "popularEvent";
-}
-
+// styled
 const CardContainer = styled.div`
   a {
     text-decoration: none;
@@ -136,76 +158,12 @@ const ImageContainer = styled.div`
   }
 `;
 
-const TextContainer = styled.div<StyledTextContainer>`
-  .timeDeal {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 8px 0;
-    padding: 5px;
-    border-radius: 3px;
-    font-size: 9px;
-    line-height: 12px;
-    font-weight: 600;
-    color: ${palette.white};
-    background-color: ${palette.blue800};
-
-    @media screen and (max-width: 640px) {
-      letter-spacing: -0.5px;
-    }
-  }
-
-  .creator {
-    font-weight: 700;
-    font-size: 0.8rem;
-    line-height: 0.875rem;
-    margin: 5px 0px;
-  }
-
-  .title {
-    ${(props) => getTitleCSS(props.type)};
-  }
-
-  .icon {
-    margin: 4px 0;
-    font-size: 11px;
-
-    .likeCount,
-    .thumsUpRate {
-      margin-right: 5px;
-      color: ${palette.gray600};
-    }
-
-    .cheerRate {
-      margin-right: 5px;
-      color: ${palette.red500};
-      font-weight: 700;
-    }
-  }
-
+const TextContainer = styled.div`
   .breakline {
     width: 100%;
     height: 1px;
     background-color: ${palette.gray100};
     margin: 8px 0;
-  }
-
-  .cheer {
-    margin-bottom: 8px;
-
-    .cheerUntil {
-      font-size: 11px;
-      font-weight: normal;
-      line-height: 16px;
-      color: ${palette.gray600};
-      margin-right: 4px;
-    }
-    .cheerDDay {
-      font-size: 11px;
-      font-weight: normal;
-      line-height: 16px;
-      color: ${palette.black};
-    }
   }
 
   .cheerButton {
@@ -214,69 +172,109 @@ const TextContainer = styled.div<StyledTextContainer>`
     font-size: 14px;
     font-weight: 500;
   }
+`;
 
-  .price {
-    min-width: 168px;
+const TimeDealCount = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 8px 0;
+  padding: 5px;
+  border-radius: 3px;
+  font-size: 9px;
+  line-height: 12px;
+  font-weight: 600;
+  color: ${palette.white};
+  background-color: ${palette.blue800};
 
-    .discountPercentage {
-      font-size: 0.8125rem;
-      font-weight: 700;
-      line-height: 1.125rem;
-      color: ${palette.red400};
-      margin-right: 2px;
-    }
-    .discountPerMonth {
-      font-size: 0.8125rem;
-      font-weight: 700;
-      line-height: 1.125rem;
-      margin-right: 2px;
-    }
-    .installment {
-      font-size: 0.6875rem;
-      font-weight: 400;
-      line-height: 0.875rem;
-      color: ${palette.gray600};
-    }
-  }
-
-  .period {
-    .dDay {
-      font-size: 0.6875rem;
-      font-weight: 700;
-      color: ${palette.red600};
-      margin-right: 5px;
-    }
-    .fullPeriod {
-      font-size: 0.6875rem;
-      font-weight: normal;
-      margin-right: 4px;
-    }
+  @media screen and (max-width: 640px) {
+    letter-spacing: -0.5px;
   }
 `;
 
-interface CardProps {
-  type: "timeDeal" | "mdRecommend" | "openSoon" | "popularEvent";
-  title: string;
-  creator?: string;
-  img: string;
-  like?: number | null;
-  thumsUp?: number | null;
-  price?: {
-    originalPrice: number;
-    salePrice: number;
-    installment: number;
-  };
-  cheer?: {
-    goal: number;
-    score: number;
-    finishDate: string;
-  };
-  period?: {
-    startDate: string;
-    finishDate: string;
-  };
-  coupon?: number | null;
-}
+const TextCreator = styled.div`
+  font-weight: 700;
+  font-size: 0.8rem;
+  line-height: 0.875rem;
+  margin: 5px 0px;
+`;
+
+const TextTitle = styled.div<StyledTextTitle>`
+  ${(props) => getTitleCSS(props.type)};
+`;
+
+const IconWrapper = styled.div`
+  margin: 4px 0;
+  font-size: 11px;
+
+  .likeCount,
+  .thumsUpRate {
+    margin-right: 5px;
+    color: ${palette.gray600};
+  }
+
+  .cheerRate {
+    margin-right: 5px;
+    color: ${palette.red500};
+    font-weight: 700;
+  }
+`;
+
+const CheerWrapper = styled.div`
+  margin-bottom: 8px;
+
+  .cheerUntil {
+    font-size: 11px;
+    font-weight: normal;
+    line-height: 16px;
+    color: ${palette.gray600};
+    margin-right: 4px;
+  }
+  .cheerDDay {
+    font-size: 11px;
+    font-weight: normal;
+    line-height: 16px;
+    color: ${palette.black};
+  }
+`;
+
+const PriceWrapper = styled.div`
+  min-width: 168px;
+
+  .discountPercentage {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    line-height: 1.125rem;
+    color: ${palette.red400};
+    margin-right: 2px;
+  }
+  .discountPerMonth {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    line-height: 1.125rem;
+    margin-right: 2px;
+  }
+  .installment {
+    font-size: 0.6875rem;
+    font-weight: 400;
+    line-height: 0.875rem;
+    color: ${palette.gray600};
+  }
+`;
+
+const PeriodWrapper = styled.div`
+  .dDay {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    color: ${palette.red600};
+    margin-right: 5px;
+  }
+  .fullPeriod {
+    font-size: 0.6875rem;
+    font-weight: normal;
+    margin-right: 4px;
+  }
+`;
 
 const Card: React.FC<CardProps> = ({
   type,
@@ -290,12 +288,9 @@ const Card: React.FC<CardProps> = ({
   period,
   coupon,
 }) => {
-  if (coupon === 0) coupon = null;
-  if (like === 0) like = null;
-  if (thumsUp === 0) thumsUp = null;
-
   let cheerRate: number | null;
-  let dDay: string | null;
+  let cheerDDay: string | null;
+  let dDay: number;
   let discountPercentage: number | null;
   let discountPerMonth: number | null;
   let discountPerMonthString: string | null;
@@ -303,14 +298,24 @@ const Card: React.FC<CardProps> = ({
   let periodStartDate: string | null;
   let periodFinishDate: string | null;
 
+  // 초기 값이 0인 경우 null
+  if (coupon === 0) coupon = null;
+  if (like === 0) like = null;
+  if (thumsUp === 0) thumsUp = null;
+
+  // cheerRate, cheerDDay
   if (cheer) {
     cheerRate = Math.floor((cheer.score / cheer.goal) * 100);
     dDay = countDDay(cheer.finishDate);
+    if (dDay > 0) cheerDDay = `${dDay}일 남음`;
+    else if (dDay === 0) cheerDDay = "오늘!!";
+    else cheerDDay = `이미 지났어요ㅠ +${dDay}`;
   } else {
     cheerRate = null;
-    dDay = null;
+    cheerDDay = null;
   }
 
+  // discountPercentage, discountPerMonth, discountPerMonthString
   if (price) {
     discountPercentage = Math.floor(
       ((price.originalPrice - price.salePrice) / price.originalPrice) * 100
@@ -323,17 +328,22 @@ const Card: React.FC<CardProps> = ({
     discountPerMonthString = null;
   }
 
+  // peridDDay, periodStartDate, periodFinishDate
   if (period) {
-    periodDDay = countDDay(period.finishDate);
-    periodStartDate = getDay(period.startDate);
-    periodFinishDate = getDay(period.finishDate);
+    dDay = countDDay(period.finishDate);
+    if (dDay > 0) periodDDay = `D-${dDay}`;
+    else if (dDay === 0) periodDDay = "D-Day!!";
+    else periodDDay = `할인 이벤트 완료! +${dDay * -1}일`;
+
+    periodStartDate = getDateAndDay(period.startDate);
+    periodFinishDate = getDateAndDay(period.finishDate);
   } else {
     periodDDay = null;
     periodStartDate = null;
     periodFinishDate = null;
   }
 
-  // 타임 딜 계산
+  // Time Deal
   const [timeLeft, setTimeLeft] = useState("");
 
   useEffect(() => {
@@ -368,20 +378,20 @@ const Card: React.FC<CardProps> = ({
           )}
           <Image src={img} alt={title} expand={true} />
         </ImageContainer>
-        <TextContainer type={type}>
+        <TextContainer>
           {type === "timeDeal" && (
-            <div className="timeDeal">
+            <TimeDealCount>
               <div>⏰ 타임딜 종료까지</div>
-              <div className="leftTime">{timeLeft}</div>
-            </div>
+              <div>{timeLeft}</div>
+            </TimeDealCount>
           )}
-          {creator && <div className="creator">{creator}</div>}
+          {creator && <TextCreator>{creator}</TextCreator>}
           {type === "timeDeal" && (
-            <div className="title">[💣24시간] {title}</div>
+            <TextTitle type={type}>[💣24시간] {title}</TextTitle>
           )}
-          {type !== "timeDeal" && <div className="title">{title}</div>}
+          {type !== "timeDeal" && <TextTitle type={type}>{title}</TextTitle>}
           {(cheerRate || like || thumsUp) && (
-            <div className="icon">
+            <IconWrapper>
               {cheer && (
                 <span className="cheerRate">
                   <Icon fillColor={palette.red400} size={10} iconName="Bell" />
@@ -405,37 +415,42 @@ const Card: React.FC<CardProps> = ({
                   {thumsUp}%
                 </span>
               )}
-            </div>
+            </IconWrapper>
           )}
           {(cheerRate || like || thumsUp) && <div className="breakline"></div>}
           {cheer && (
-            <div className="cheer">
+            <CheerWrapper>
               <span className="cheerUntil">응원마감까지</span>
-              <span className="cheerDDay">{dDay}일 남음</span>
-            </div>
+              <span className="cheerDDay">{cheerDDay}</span>
+            </CheerWrapper>
           )}
           {price && (
-            <div className="price">
+            <PriceWrapper>
               {discountPercentage !== 0 && (
                 <span className="discountPercentage">
                   {discountPercentage}%{" "}
                 </span>
               )}
-              <span className="discountPerMonth">
-                월 {discountPerMonthString}원{" "}
-              </span>
-              {price.installment && (
+              {price.salePrice >= 1000 && (
+                <span className="discountPerMonth">
+                  월 {discountPerMonthString}원{" "}
+                </span>
+              )}
+              {price.installment && price.salePrice >= 1000 && (
                 <span className="installment">({price.installment}개월)</span>
               )}
-            </div>
+              {price.salePrice < 1000 && (
+                <span className="discountPerMonth">{price.salePrice}원 </span>
+              )}
+            </PriceWrapper>
           )}
           {period && period.startDate !== "0" && (
-            <div className="period">
-              <span className="dDay">D-{periodDDay}</span>
+            <PeriodWrapper>
+              <span className="dDay">{periodDDay}</span>
               <span className="fullPeriod">
                 {periodStartDate} ~ {periodFinishDate}
               </span>
-            </div>
+            </PeriodWrapper>
           )}
           {type === "openSoon" && (
             <Button

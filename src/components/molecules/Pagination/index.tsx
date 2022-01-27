@@ -1,16 +1,30 @@
 import styled from "styled-components";
 import palette from "../../../styles/palette";
 
+//type
+type paginationType = "number" | "circle";
+
+interface PaginationProps extends React.HTMLAttributes<HTMLDivElement> {
+  paginationType?: paginationType;
+  pageIndex: number;
+  slidesPerView: number;
+  childrenCount: number;
+  onClickPaginationHandler?: (index: number) => void;
+}
+
+// function
 const pageNumberToString = (pageNumber: number) => {
   if (pageNumber.toString().length === 1) return `0${pageNumber}`;
   else return `${pageNumber}`;
 };
 
+// styled-components
 const PaginationContainer = styled.div``;
 
 const PaginationNumber = styled.div`
   font-size: 14px;
   color: ${palette.white};
+
   .currentPage {
     font-weight: 800;
   }
@@ -51,34 +65,26 @@ const PaginationCircle = styled.div`
   }
 `;
 
-interface PaginationProps extends React.HTMLAttributes<HTMLDivElement> {
-  paginationType?: "number" | "circle";
-  active: number;
-  slidesPerView: number;
-  childrenCount: number;
-  onClickPaginationHandler?: (index: number) => void;
-}
-
 const Pagination: React.FC<PaginationProps> = ({
   paginationType,
-  active,
+  pageIndex,
   slidesPerView,
   childrenCount,
   onClickPaginationHandler = () => {},
   className,
 }) => {
-  const pages = childrenCount - slidesPerView + 1;
-  const currentPage = active + 1;
+  const pagesCount = childrenCount - slidesPerView + 1;
+  const currentPage = pageIndex + 1;
   const currentPageString = pageNumberToString(currentPage);
-  const lastPageString = pageNumberToString(pages);
+  const lastPageString = pageNumberToString(pagesCount);
 
-  const array = Array.from(Array(pages).keys());
+  const pageArray = Array.from(Array(pagesCount).keys());
   const circleOrNot = (index: number) => {
-    if (active === index) return "longCircle";
+    if (pageIndex === index) return "longCircle";
     else return "";
   };
 
-  if (pages > 1)
+  if (pagesCount > 1)
     return (
       <PaginationContainer className={className}>
         {paginationType === "number" && (
@@ -90,13 +96,13 @@ const Pagination: React.FC<PaginationProps> = ({
         )}
         {paginationType === "circle" && (
           <PaginationCircle>
-            {array.map((val, index) => {
+            {pageArray.map((val, index) => {
               return (
                 <div
                   key={val}
                   className={`${circleOrNot(index)} circle`}
                   onClick={() => onClickPaginationHandler(index)}
-                ></div>
+                />
               );
             })}
           </PaginationCircle>

@@ -1,6 +1,24 @@
 import styled, { css } from "styled-components";
 import palette from "../../../styles/palette";
 
+// type
+type color = "default" | "orange" | "orangeLight";
+type backgroundColor = "default" | "orange" | "orangeLight";
+
+interface StyledButtonProps {
+  color: color;
+  size: "md";
+  backgroundColor: backgroundColor;
+}
+
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  children: React.ReactNode;
+  backgroundColor?: "default" | "orange" | "orangeLight";
+  color?: "default" | "orange" | "orangeLight";
+  size?: "md";
+}
+
+// function
 const getButtonBackgroundColor = (color: string) => {
   switch (color) {
     case "orange":
@@ -45,13 +63,8 @@ const getButtonSize = (size: "md") => {
   }
 };
 
-interface StyledButtonProps {
-  color: "default" | "orange" | "orangeLight";
-  size: "md";
-  backgroundColor: "default" | "orange" | "orangeLight";
-}
-
-const ButtonBox = styled.button<StyledButtonProps>`
+// styled-components
+const ButtonContainer = styled.button<StyledButtonProps>`
   width: 100%;
   border: 0;
   border-radius: 3px;
@@ -61,13 +74,6 @@ const ButtonBox = styled.button<StyledButtonProps>`
   ${(props) => getButtonSize(props.size)};
   ${(props) => getButtonBackgroundColor(props.backgroundColor)}
 `;
-
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  children: React.ReactNode;
-  backgroundColor?: "default" | "orange" | "orangeLight";
-  color?: "default" | "orange" | "orangeLight";
-  size?: "md";
-}
 
 const Button: React.FC<ButtonProps> = ({
   children,
@@ -80,7 +86,7 @@ const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   return (
-    <ButtonBox
+    <ButtonContainer
       {...props}
       backgroundColor={backgroundColor}
       color={color}
@@ -90,7 +96,7 @@ const Button: React.FC<ButtonProps> = ({
       disabled={disabled}
     >
       {children}
-    </ButtonBox>
+    </ButtonContainer>
   );
 };
 

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import { createPortal } from "react-dom";
 import styled from "styled-components";
 import palette from "../../../styles/palette";
 import Button from "../../atoms/Button";
@@ -9,8 +8,12 @@ import { recommendSearch, popularSearchTerm } from "../../../data/data";
 import TextButton from "../../atoms/TextButton";
 import IconButton from "../../atoms/IconButton";
 
-const modalRoot = document.getElementById("modal-root") as HTMLElement;
+// type
+interface SearchBarModalProps {
+  closeModal: () => void;
+}
 
+// function
 const getHour = () => {
   const localTime = new Date();
   let hour = localTime.getHours().toString();
@@ -22,23 +25,7 @@ const getHour = () => {
   return hour;
 };
 
-const ModalContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 11;
-  margin: 0px;
-`;
-
-const ModalBackground = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.75);
-`;
-
+// styled-components
 const SearchModalContainer = styled.div`
   width: 100%;
   background-color: ${palette.white};
@@ -47,7 +34,6 @@ const SearchModalContainer = styled.div`
 `;
 
 const HeaderWrapper = styled.div`
-  width: 100%;
   padding: 20px 0;
   display: flex;
   align-items: center;
@@ -230,12 +216,7 @@ const CandidateName = styled.span`
   }
 `;
 
-interface fast {
-  isOpen: boolean;
-  closeModal: () => void;
-}
-
-const SearchBarModal: React.FC<fast> = ({ isOpen, closeModal, children }) => {
+const SearchBarModal: React.FC<SearchBarModalProps> = ({ closeModal }) => {
   // localstorage
   const recommendSearchLength = recommendSearch.recommend_search.length;
   let refs: React.MutableRefObject<React.RefObject<HTMLButtonElement>[]> =
@@ -277,103 +258,94 @@ const SearchBarModal: React.FC<fast> = ({ isOpen, closeModal, children }) => {
     return () => clearInterval(id);
   }, [time]);
 
-  if (!isOpen) return null;
-
   // popularSearchItem 1~10
   const firstToFifth = popularSearchTerm.popular_search_term.slice(0, 5);
   const sixthToTenth = popularSearchTerm.popular_search_term.slice(5);
 
-  return createPortal(
-    <ModalContainer>
-      <SearchModalContainer>
-        <HeaderWrapper>
-          <LogoWrapper>CLASS102</LogoWrapper>
-          <SearchBarWrapper>
-            <SearchBar
-              placeholder="찾으시는 취미가 있으신가요?"
-              modal={false}
-            />
-            <Button className="closeModal" onClick={closeModal}>
-              취소
-            </Button>
-          </SearchBarWrapper>
-        </HeaderWrapper>
+  return (
+    <SearchModalContainer>
+      <HeaderWrapper>
+        <LogoWrapper>CLASS102</LogoWrapper>
+        <SearchBarWrapper>
+          <SearchBar placeholder="찾으시는 취미가 있으신가요?" modal={false} />
+          <Button className="closeModal" onClick={closeModal}>
+            취소
+          </Button>
+        </SearchBarWrapper>
+      </HeaderWrapper>
 
-        <RecPopSearchWrapper>
-          {searchedWords[0] && (
-            <RecentSearchBox>
-              <SearchTitle>
-                최근 검색어
-                <TextButton
-                  className="clearAllButton"
-                  onClick={() => clearAllData()}
-                >
-                  전체 삭제
-                </TextButton>
-              </SearchTitle>
-
-              <RecentSearchItem>
-                {searchedWords.map((value, index) => (
-                  <RecentSearchItem>
-                    <IconButton
-                      className="closeButton"
-                      iconName="Close"
-                      fillColor={palette.gray500}
-                      onClick={() => removeData(value)}
-                    />
-                    <RecentSearchTerm>{value}</RecentSearchTerm>
-                  </RecentSearchItem>
-                ))}
-              </RecentSearchItem>
-            </RecentSearchBox>
-          )}
-
-          <SearchTitle>추천 검색어</SearchTitle>
-          <RecommendSearchBox>
-            {recommendSearch.recommend_search.map((value, index) => (
-              <button
-                className={"recommendButton"}
-                key={value}
-                ref={refs.current[index]}
-                onClick={() => saveData(index)}
+      <RecPopSearchWrapper>
+        {searchedWords[0] && (
+          <RecentSearchBox>
+            <SearchTitle>
+              최근 검색어
+              <TextButton
+                className="clearAllButton"
+                onClick={() => clearAllData()}
               >
-                {value}
-              </button>
+                전체 삭제
+              </TextButton>
+            </SearchTitle>
+
+            <RecentSearchItem>
+              {searchedWords.map((value, index) => (
+                <RecentSearchItem key={value}>
+                  <IconButton
+                    className="closeButton"
+                    iconName="Close"
+                    fillColor={palette.gray500}
+                    onClick={() => removeData(value)}
+                  />
+                  <RecentSearchTerm>{value}</RecentSearchTerm>
+                </RecentSearchItem>
+              ))}
+            </RecentSearchItem>
+          </RecentSearchBox>
+        )}
+
+        <SearchTitle>추천 검색어</SearchTitle>
+        <RecommendSearchBox>
+          {recommendSearch.recommend_search.map((value, index) => (
+            <button
+              className={"recommendButton"}
+              key={value}
+              ref={refs.current[index]}
+              onClick={() => saveData(index)}
+            >
+              {value}
+            </button>
+          ))}
+        </RecommendSearchBox>
+
+        <SearchTitle>
+          인기검색어 &nbsp;
+          <span className="timeStandard">
+            <Icon iconName="Clock" size={11} fillColor={palette.gray700} />
+            &nbsp;
+            {time} 기준
+          </span>
+        </SearchTitle>
+
+        <PopularSearchBox>
+          <PopularSearchKeyList>
+            {firstToFifth.map((value, index) => (
+              <PopularSearachItem key={value}>
+                <CandidateRanking>{index + 1}</CandidateRanking>
+                <CandidateName>{value}</CandidateName>
+              </PopularSearachItem>
             ))}
-          </RecommendSearchBox>
-
-          <SearchTitle>
-            인기검색어 &nbsp;
-            <span className="timeStandard">
-              <Icon iconName="Clock" size={11} fillColor={palette.gray700} />
-              &nbsp;
-              {time} 기준
-            </span>
-          </SearchTitle>
-
-          <PopularSearchBox>
-            <PopularSearchKeyList>
-              {firstToFifth.map((value, index) => (
-                <PopularSearachItem key={value}>
-                  <CandidateRanking>{index + 1}</CandidateRanking>
-                  <CandidateName>{value}</CandidateName>
-                </PopularSearachItem>
-              ))}
-            </PopularSearchKeyList>
-            <PopularSearchKeyList>
-              {sixthToTenth.map((value, index) => (
-                <PopularSearachItem key={value}>
-                  <CandidateRanking>{index + 6}</CandidateRanking>
-                  <CandidateName>{value}</CandidateName>
-                </PopularSearachItem>
-              ))}
-            </PopularSearchKeyList>
-          </PopularSearchBox>
-        </RecPopSearchWrapper>
-      </SearchModalContainer>
-      <ModalBackground onClick={closeModal} />
-    </ModalContainer>,
-    modalRoot
+          </PopularSearchKeyList>
+          <PopularSearchKeyList>
+            {sixthToTenth.map((value, index) => (
+              <PopularSearachItem key={value}>
+                <CandidateRanking>{index + 6}</CandidateRanking>
+                <CandidateName>{value}</CandidateName>
+              </PopularSearachItem>
+            ))}
+          </PopularSearchKeyList>
+        </PopularSearchBox>
+      </RecPopSearchWrapper>
+    </SearchModalContainer>
   );
 };
 
