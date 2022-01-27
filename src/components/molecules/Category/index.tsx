@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { category } from "../../../data/data";
 import palette from "../../../styles/palette";
@@ -68,24 +68,35 @@ const SubCategoryUL = styled.ul`
   height: 740px;
   display: none;
   left: 210px;
-  top: -1px;
+  top: -17px;
 `;
 
 const Category: React.FC<CategoryProps> = ({ className }) => {
   // mouse event
-  const container = useRef<HTMLDivElement>(null);
-  const onMouseEnter = () => {
-    const { current } = container;
-    if (current != null) {
-      current.style.width = `391px`;
-    }
+  const subCategoryRef = useRef<HTMLUListElement>(null);
+  const subCategory = subCategoryRef.current;
+  const [smallCategory, setSmallCategory] = useState<string[]>([]);
+  const [mediumCategory, setMediumCategory] = useState("");
+
+  const onMouseEnter = (large: string, medium: string) => {
+    setSmallCategory((category as categoryData)[large][medium]);
+    setMediumCategory(medium);
   };
   const onMouseLeave = () => {
-    const { current } = container;
-    if (current != null) {
-      current.style.width = `180px`;
+    if (subCategory) {
+      setSmallCategory([]);
     }
   };
+
+  useEffect(() => {
+    if (subCategory) {
+      subCategory.style.display = "block";
+      if (!smallCategory[0]) {
+        subCategory.style.display = "none";
+      }
+    }
+  }, [subCategory, smallCategory]);
+
   // category
   const large = Object.keys(category);
   const getMedium = (large: keyof typeof category) => {
@@ -93,29 +104,29 @@ const Category: React.FC<CategoryProps> = ({ className }) => {
   };
 
   return (
-    <CategoryContainer ref={container} className={className}>
+    <CategoryContainer
+      className={className}
+      onMouseLeave={() => onMouseLeave()}
+    >
       {large.map((large) => (
         <CategoryUL key={large}>
           <CategoryTitle>{large}</CategoryTitle>
           {getMedium(large as keyof typeof category).map((medium) => (
             <CategoryLI
-              onMouseEnter={() => onMouseEnter()}
-              onMouseLeave={() => onMouseLeave()}
+              onMouseEnter={() => onMouseEnter(large, medium)}
               key={medium}
             >
               {medium}
-              <SubCategoryUL className="subCategory">
-                <CategoryTitle>{medium}</CategoryTitle>
-                {(category as categoryData)[large][medium].map(
-                  (small: string) => (
-                    <CategoryLI key={small}>{small}</CategoryLI>
-                  )
-                )}
-              </SubCategoryUL>
             </CategoryLI>
           ))}
         </CategoryUL>
       ))}
+      <SubCategoryUL className="subCategory" ref={subCategoryRef}>
+        <CategoryTitle>{mediumCategory}</CategoryTitle>
+        {smallCategory.map((small: string) => (
+          <CategoryLI key={small}>{small}</CategoryLI>
+        ))}
+      </SubCategoryUL>
     </CategoryContainer>
   );
 };
