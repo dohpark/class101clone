@@ -263,7 +263,7 @@ const Carousel: React.FC<CarouselProps> = ({
   const slideRef = useRef<HTMLDivElement>(null);
   const slide = slideRef.current;
 
-  // 화면 크기 변화 대응
+  // 화면 크기 변화 및 반응형 대응
   useEffect(() => {
     if (slide) {
       slide.style.transition = "transform 0s cubic-bezier(1,-0.01, 1, 1)";
@@ -273,11 +273,10 @@ const Carousel: React.FC<CarouselProps> = ({
         ((slide.offsetWidth + SLIDE_MARGIN) / slidesPerView) * slideIndex;
 
       slide.style.transform = `translateX(-${width}px)`;
-
       const transX = Number(slide.style.transform.replace(/[^0-9.-]/g, ""));
       setTransLeftOffset(transX);
     }
-  }, [innerWidth, maxSlideIndex, slide, slideIndex, slidesPerView]);
+  }, [innerWidth, maxSlideIndex, slidesPerView]);
 
   // pageIndex 변화 대응
   useEffect(() => {
@@ -291,7 +290,7 @@ const Carousel: React.FC<CarouselProps> = ({
       const transX = Number(slide.style.transform.replace(/[^0-9.-]/g, ""));
       setTransLeftOffset(transX);
     }
-  }, [slideIndex, slidesPerView, slide]);
+  }, [slideIndex]);
 
   // click event
   const onClickLeft = (event: React.MouseEvent<HTMLElement>) => {
@@ -429,6 +428,8 @@ const Carousel: React.FC<CarouselProps> = ({
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     if (drag) event.preventDefault();
   };
+
+  // touch drag
 
   // pagination
   let paginationActive: boolean;
