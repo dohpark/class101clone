@@ -29,7 +29,15 @@ const getHour = () => {
 const SearchModalContainer = styled.div`
   width: 100%;
   background-color: ${palette.white};
-  overflow-y: auto;
+  overflow-y: scroll;
+
+  @media screen and (max-width: 1024px) {
+    height: 100vh;
+  }
+
+  @media screen and (min-width: 1024px) {
+    height: 75vh;
+  }
 `;
 
 const HeaderWrapper = styled.div`
@@ -70,7 +78,7 @@ const SearchBarWrapper = styled.div`
   margin: auto;
 
   @media screen and (max-width: 1024px) {
-    width: 100%;
+    width: 90%;
     padding: 8px 0px 0px 20px;
   }
 
@@ -92,7 +100,7 @@ const RecPopSearchWrapper = styled.div`
   padding: 4px 0 28px;
 
   @media screen and (max-width: 1024px) {
-    width: 95%;
+    width: calc(100% - 24px);
     padding: 24px 0px 28px 24px;
     margin: 0;
   }
