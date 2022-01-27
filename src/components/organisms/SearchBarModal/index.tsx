@@ -30,7 +30,6 @@ const SearchModalContainer = styled.div`
   width: 100%;
   background-color: ${palette.white};
   overflow-y: auto;
-  height: 60vh;
 `;
 
 const HeaderWrapper = styled.div`
