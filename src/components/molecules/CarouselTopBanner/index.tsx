@@ -38,6 +38,7 @@ const getBackgroundColor = (bgColorImgArray: string[][], page: number) => {
 
 // styled-components
 const BannerOuterContainer = styled.div`
+  box-sizing: border-box;
   padding-bottom: 34px;
   margin-bottom: 72px;
 `;
@@ -47,7 +48,6 @@ const BannerInnerContainer = styled.div<StyledBackgroundColor>`
 `;
 
 const BannerWrapper = styled.div`
-  width: 90%;
   margin-left: auto;
   margin-right: auto;
   display: flex;
@@ -86,7 +86,6 @@ const ImageCarouselContainer = styled.div`
 
 const SlideProps = styled.div`
   margin: 0;
-  height: 100%;
   width: 100%;
   display: float;
   transform: translateX(0);
@@ -112,7 +111,10 @@ const TextWrapper = styled.div`
   width: 42%;
   background-color: transparent;
   padding-left: 48px;
-  padding-bottom: 32px;
+  padding-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   @media screen and (max-width: 640px) {
     margin: 0;
@@ -121,20 +123,7 @@ const TextWrapper = styled.div`
 
   @media screen and (min-width: 640px) and (max-width: 1024px) {
     padding-left: 24px;
-    padding-bottom: 0px;
-  }
-`;
-
-const TextContent = styled.div`
-  display: flex;
-  height: 100%;
-  flex-direction: column;
-  justify-content: space-between;
-  padding-top: 56px;
-
-  @media screen and (max-width: 640px) {
-    margin: 0;
-    padding: 0;
+    padding-bottom: 12px;
   }
 
   .title {
@@ -152,6 +141,10 @@ const TextContent = styled.div`
     word-break: keep-all;
 
     @media screen and (max-width: 640px) {
+      margin-top: 26px;
+    }
+
+    @media screen and (max-width: 1024px) {
       font-size: 26px;
       line-height: 34px;
       max-width: 300px;
@@ -173,10 +166,10 @@ const TextContent = styled.div`
     -webkit-box-orient: vertical;
     word-break: keep-all;
 
-    @media screen and (max-width: 640px) {
+    @media screen and (max-width: 1024px) {
       font-size: 14px;
       max-width: 300px;
-      min-width: 170px;
+      min-width: 220px;
       line-height: 20px;
       font-weight: 400;
       color: ${palette.gray400};
@@ -188,7 +181,6 @@ const PageBarButtonWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: right;
-  padding-bottom: 65px;
 
   @media screen and (max-width: 640px) {
     display: none;
@@ -284,12 +276,12 @@ const CarouselTopBanner: React.FC<BannerProps> = ({ array }) => {
   }, [page, innerWidth]);
 
   // autoplay
-  useEffect(() => {
-    const id = setInterval(() => {
-      setPage(page + 1);
-    }, 5 * 1000);
-    return () => clearInterval(id);
-  }, [page]);
+  // useEffect(() => {
+  //   const id = setInterval(() => {
+  //     setPage(page + 1);
+  //   }, 5 * 1000);
+  //   return () => clearInterval(id);
+  // }, [page]);
 
   return (
     <BannerOuterContainer>
@@ -315,37 +307,35 @@ const CarouselTopBanner: React.FC<BannerProps> = ({ array }) => {
             </SlideProps>
           </ImageCarouselContainer>
           <TextWrapper>
-            <TextContent>
-              <div>
-                <p className="title">{title}</p>
-                <p className="subtitle">{subtitle}</p>
-              </div>
-              <PageBarButtonWrapper>
-                <Pagination
-                  className="number"
-                  paginationType="number"
-                  slidesPerView={1}
-                  pageIndex={page}
-                  childrenCount={lastIndex + 1}
-                  onClickPaginationHandler={() => {}}
-                />
-                <ProgressBar className="progressBar" />
-                <IconButton
-                  className="leftButton"
-                  iconName="ChevronLeft"
-                  fillColor="white"
-                  backgroundColor="transparent"
-                  onClick={onClickLeft}
-                />
-                <IconButton
-                  className="rightButton"
-                  iconName="ChevronRight"
-                  fillColor="white"
-                  backgroundColor="transparent"
-                  onClick={onClickRight}
-                />
-              </PageBarButtonWrapper>
-            </TextContent>
+            <div>
+              <p className="title">{title}</p>
+              <p className="subtitle">{subtitle}</p>
+            </div>
+            <PageBarButtonWrapper>
+              <Pagination
+                className="number"
+                paginationType="number"
+                slidesPerView={1}
+                pageIndex={page}
+                childrenCount={lastIndex + 1}
+                onClickPaginationHandler={() => {}}
+              />
+              <ProgressBar className="progressBar" />
+              <IconButton
+                className="leftButton"
+                iconName="ChevronLeft"
+                fillColor="white"
+                backgroundColor="transparent"
+                onClick={onClickLeft}
+              />
+              <IconButton
+                className="rightButton"
+                iconName="ChevronRight"
+                fillColor="white"
+                backgroundColor="transparent"
+                onClick={onClickRight}
+              />
+            </PageBarButtonWrapper>
           </TextWrapper>
         </BannerWrapper>
       </BannerInnerContainer>
