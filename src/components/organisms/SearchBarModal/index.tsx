@@ -231,6 +231,15 @@ const SearchBarModal: React.FC<SearchBarModalProps> = ({ closeModal }) => {
 
   const [searchedWords, setSearchedWords] = useState<string[]>([]);
 
+  // 렌더링 될때 실행
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const result = localStorage.getItem("searchedWords") || "[]";
+      setSearchedWords(JSON.parse(result));
+    }
+  }, []);
+
+  // searchedWords 변경될때 실행
   useEffect(() => {
     localStorage.setItem("searchedWords", JSON.stringify(searchedWords));
   }, [searchedWords]);
