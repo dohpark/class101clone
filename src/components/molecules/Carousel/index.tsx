@@ -3,6 +3,7 @@ import { useState, useRef } from "react";
 import styled, { css } from "styled-components";
 import useWindowDimensions from "../../../hooks/useWindowDimensions";
 import IconButton from "../../atoms/IconButton";
+import useProgressBar from "../../atoms/ProgressBar/useProgressBar";
 import Pagination from "../Pagination";
 
 // css types
@@ -70,11 +71,20 @@ const useCarousel = (
   const { innerWidth } = useWindowDimensions();
   if (innerWidth <= 1024) slidesPerView = responsiveSlidesPerView;
 
+  // progress bar
+  const { resetAnimation, ProgressBar } = useProgressBar();
+
   // swipe effect
   const [slideIndex, setSlideIndex] = useState(0);
   const maxSlideIndex = slidesCount - slidesPerView;
   const slideRef = useRef<HTMLDivElement>(null);
   const slide = slideRef.current;
+
+  if (slideIndex < 0) {
+    setSlideIndex(slidesCount - 1);
+  } else if (slideIndex > slidesCount - 1) {
+    setSlideIndex(0);
+  }
 
   // 화면 크기 변화 및 반응형 대응
   useEffect(() => {
@@ -88,6 +98,7 @@ const useCarousel = (
       slide.style.transform = `translateX(-${width}px)`;
       const transX = Number(slide.style.transform.replace(/[^0-9.-]/g, ""));
       setTransLeftOffset(transX);
+      resetAnimation();
     }
   }, [innerWidth, maxSlideIndex, slidesPerView]);
 
@@ -102,6 +113,7 @@ const useCarousel = (
 
       const transX = Number(slide.style.transform.replace(/[^0-9.-]/g, ""));
       setTransLeftOffset(transX);
+      resetAnimation();
     }
   }, [slideIndex]);
 
@@ -210,7 +222,12 @@ const useCarousel = (
       setTransLeftOffset(transX);
 
       // 첫번째 슬라이드에서 왼쪽으로 넘길려 할때 제어
-      if (transX > 0) {
+      const maxTransX =
+        ((slide.offsetWidth + SLIDE_MARGIN) / slidesPerView) *
+        (slidesCount - slidesPerView) *
+        -1;
+
+      if (transX > 0 && autoplay === false) {
         slide.style.transform = `translateX(0px)`;
         setSlideIndex(0);
         setWalk(0);
@@ -218,11 +235,7 @@ const useCarousel = (
       }
 
       // 마지막 슬라이드에서 오른쪽으로 넘길려 할때 제어
-      const maxTransX =
-        ((slide.offsetWidth + SLIDE_MARGIN) / slidesPerView) *
-        (slidesCount - slidesPerView) *
-        -1;
-      if (transX < maxTransX) {
+      if (transX < maxTransX && autoplay === false) {
         slide.style.transform = `translateX(${maxTransX}px)`;
         setSlideIndex(slidesCount - slidesPerView);
         setWalk(0);
@@ -312,10 +325,12 @@ const useCarousel = (
     );
   };
 
-  const ProgressBar = () => {};
+  const ProgressBarProp: React.FC<{ className: string }> = ({ className }) => {
+    return <ProgressBar className={className} />;
+  };
 
   const PaginationProp: React.FC<{
-    paginationType: "circle";
+    paginationType: "circle" | "number";
     className: string;
   }> = ({ paginationType, className }) => {
     return (
@@ -360,9 +375,10 @@ const useCarousel = (
   return {
     LeftButton,
     RightButton,
-    ProgressBar,
+    ProgressBarProp,
     PaginationProp,
     CarouselContainer,
+    slideIndex,
   };
 };
 

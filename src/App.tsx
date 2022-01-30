@@ -12,10 +12,10 @@ import Section from "./components/organisms/Section";
 import Header from "./components/organisms/Header";
 import Nav from "./components/organisms/Nav";
 import Banner from "./components/molecules/Banner";
-import CarouselTopBanner from "./components/organisms/CarouselTopBanner";
 import BottomNav from "./components/organisms/BottomNav";
 import CarouselBanner from "./components/organisms/CarouselBanner";
 import CarouselCard from "./components/organisms/CarouselCard";
+import TopBanner from "./components/organisms/TopBanner";
 
 const HomePage = styled.div``;
 
@@ -28,7 +28,7 @@ function App() {
     <HomePage>
       <Header />
       <Nav />
-      <CarouselTopBanner array={topEvent.top_event} />
+      <TopBanner array={topEvent.top_event} />
       <Section title={"오늘의 특가! TIME DEAL"} button={true}>
         <CarouselCard slidesPerView={4} mobileSlidesPerView={2}>
           {timeDeal.time_deal.map(
