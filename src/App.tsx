@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import Card from "./components/molecules/Card";
-import Carousel from "./components/molecules/Carousel";
 import {
   timeDeal,
   popularEvent,
@@ -13,8 +12,10 @@ import Section from "./components/organisms/Section";
 import Header from "./components/organisms/Header";
 import Nav from "./components/organisms/Nav";
 import Banner from "./components/molecules/Banner";
-import CarouselTopBanner from "./components/molecules/CarouselTopBanner";
+import CarouselTopBanner from "./components/organisms/CarouselTopBanner";
 import BottomNav from "./components/organisms/BottomNav";
+import CarouselBanner from "./components/organisms/CarouselBanner";
+import CarouselCard from "./components/organisms/CarouselCard";
 
 const HomePage = styled.div``;
 
@@ -29,11 +30,7 @@ function App() {
       <Nav />
       <CarouselTopBanner array={topEvent.top_event} />
       <Section title={"오늘의 특가! TIME DEAL"} button={true}>
-        <Carousel
-          slidesPerView={4}
-          navPosition="eachSide"
-          buttonIconColor="black"
-        >
+        <CarouselCard slidesPerView={4} mobileSlidesPerView={2}>
           {timeDeal.time_deal.map(
             ({ id, title, creator, img, like, thumsUp, price, coupon }) => (
               <Card
@@ -49,14 +46,10 @@ function App() {
               />
             )
           )}
-        </Carousel>
+        </CarouselCard>
       </Section>
       <Section title={"MD 추천 클래스"}>
-        <Carousel
-          slidesPerView={4}
-          navPosition="eachSide"
-          buttonIconColor="black"
-        >
+        <CarouselCard slidesPerView={4} mobileSlidesPerView={2}>
           {mdRecommend.md_recommend.map(
             ({ id, title, creator, img, like, thumsUp, price, coupon }) => (
               <Card
@@ -72,17 +65,10 @@ function App() {
               />
             )
           )}
-        </Carousel>
+        </CarouselCard>
       </Section>
       <BannerContainer>
-        <Carousel
-          type="banner"
-          slidesPerView={1}
-          navPosition="rightIn"
-          buttonIconColor="black"
-          buttonBackgroundColor="white"
-          paginationType="circle"
-        >
+        <CarouselBanner slidesPerView={1} mobileSlidesPerView={1}>
           {bottomEvent.bottom_event.map(
             ({ id, title, subtitle, img, bgColor }) => (
               <Banner
@@ -94,18 +80,14 @@ function App() {
               />
             )
           )}
-        </Carousel>
+        </CarouselBanner>
       </BannerContainer>
       <Section
         title={"오픈 예정 클래스"}
         subTitle={"오픈 예정인 클래스를 응원하면 얼리버드 오픈 시 알려드려요!"}
         button={true}
       >
-        <Carousel
-          slidesPerView={4}
-          navPosition="eachSide"
-          buttonIconColor="black"
-        >
+        <CarouselCard slidesPerView={4} mobileSlidesPerView={2}>
           {openSoon.open_soon.map(({ id, title, creator, img, cheer }) => (
             <Card
               type="openSoon"
@@ -116,19 +98,14 @@ function App() {
               cheer={cheer}
             />
           ))}
-        </Carousel>
+        </CarouselCard>
       </Section>
       <Section
         title={"인기있는 신규 클래스"}
         subTitle={"얼리버드 기간에만 받을 수 있는 최저가 할인 중이에요"}
         button={true}
       >
-        <Carousel
-          slidesPerView={3}
-          navPosition="eachSide"
-          buttonIconColor="black"
-          type="popular"
-        >
+        <CarouselCard slidesPerView={3} mobileSlidesPerView={1}>
           {popularEvent.popular_event.map(({ id, title, img, period }) => (
             <Card
               type="popularEvent"
@@ -138,7 +115,7 @@ function App() {
               period={period}
             />
           ))}
-        </Carousel>
+        </CarouselCard>
       </Section>
       <BottomNav />
     </HomePage>

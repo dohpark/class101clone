@@ -4,7 +4,7 @@ import palette from "../../../styles/palette";
 import Badge from "../../atoms/Badge";
 import Image from "../../atoms/Image";
 import IconButton from "../../atoms/IconButton";
-import Pagination from "../Pagination";
+import Pagination from "../../molecules/Pagination";
 import useProgressBar from "../../atoms/ProgressBar/useProgressBar";
 import useWindowDimensions from "../../../hooks/useWindowDimensions";
 

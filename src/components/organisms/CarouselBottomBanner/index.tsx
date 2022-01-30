@@ -1,19 +1,44 @@
-import React, { useEffect } from "react";
+import React, { Children, useEffect } from "react";
 import { useState, useRef } from "react";
 import styled, { css } from "styled-components";
 import useWindowDimensions from "../../../hooks/useWindowDimensions";
 import IconButton from "../../atoms/IconButton";
-import Pagination from "../Pagination";
+import Pagination from "../../molecules/Pagination";
+
+// general type
+type carouselTypes = "banner" | "popular" | "default";
+type navPosition = "rightIn" | "eachSide";
 
 // css types
 interface StyledSlideContainer {
   slidesPerView: number;
   slidesCount: number;
+  type: carouselTypes;
+}
+
+interface StyledButtonContainer {
+  navPosition: navPosition;
+}
+
+interface StyledCarouselOuterContainer {
+  navPosition: navPosition;
+  type: carouselTypes;
+}
+
+interface StyledCarouselInnerContainer {
+  type: carouselTypes;
 }
 
 // function component type
 interface CarouselProps extends React.HTMLAttributes<HTMLDivElement> {
+  type?: carouselTypes;
+  slidesPerView: number;
+  navPosition: navPosition;
+  paginationType?: "circle" | "number";
+  autoplay?: boolean;
   children: React.ReactNode;
+  buttonBackgroundColor?: "black" | "white" | "transparent";
+  buttonIconColor?: "black" | "white";
 }
 
 // const
@@ -36,14 +61,152 @@ const slidesPerViewWidth = (slidesPerView: number, slidesCount: number) => {
   }
 };
 
+// css function
+const getWidthPercentage = (type: carouselTypes) => {
+  switch (type) {
+    case "banner":
+      return css`
+        width: 100%;
+      `;
+    default:
+      return css`
+        width: 100%;
+      `;
+  }
+};
+
+const getNavPosition = (navPosition: navPosition) => {
+  switch (navPosition) {
+    case "rightIn":
+      return css`
+        position: absolute;
+        bottom: 5%;
+        left: 85%;
+        width: 100%;
+        z-index: 1;
+
+        .leftButton {
+          margin: 0;
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+
+          @media screen and (max-width: 1024px) {
+            display: none;
+          }
+        }
+        .rightButton {
+          margin: 0;
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+
+          @media screen and (max-width: 1024px) {
+            display: none;
+          }
+        }
+      `;
+    case "eachSide":
+      return css`
+        position: relative;
+
+        .leftButton {
+          position: absolute;
+          z-index: 1;
+          top: 40%;
+          left: -5%;
+
+          &:disabled {
+            background-color: transparent;
+          }
+
+          @media screen and (max-width: 1240px) {
+            display: none;
+          }
+        }
+
+        .rightButton {
+          position: absolute;
+          z-index: 1;
+          right: -5%;
+          top: 40%;
+
+          &:disabled {
+            background-color: transparent;
+          }
+
+          @media screen and (max-width: 1240px) {
+            display: none;
+          }
+        }
+      `;
+  }
+};
+
+const getOuterContainerResponsiveStyle = (
+  type: "default" | "banner" | "popular"
+) => {
+  switch (type) {
+    case "banner":
+      return css``;
+    default:
+      return css`
+        margin-left: -24px;
+        margin-right: -24px;
+        width: calc(100% + 48px);
+        overflow: hidden;
+      `;
+  }
+};
+
+const getInnerContainerResponsiveStyle = (
+  type: "default" | "banner" | "popular"
+) => {
+  switch (type) {
+    case "banner":
+      return css``;
+    default:
+      return css`
+        overflow: visible;
+        width: calc(100% - 48px);
+      `;
+  }
+};
+
 // styled components
-const CarouselInnerContainer = styled.div`
+const CarouselOuterContainer = styled.div<StyledCarouselOuterContainer>`
+  margin: auto;
+  width: 100%;
+  ${(props) =>
+    props.navPosition === "eachSide" && getNavPosition(props.navPosition)};
+
+  @media screen and (max-width: 1024px) {
+    ${(props) => getOuterContainerResponsiveStyle(props.type)}
+  }
+
+  .circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    bottom: 15px;
+    z-index: 333;
+
+    @media screen and (max-width: 1240px) {
+      bottom: 20px;
+    }
+  }
+`;
+
+const CarouselInnerContainer = styled.div<StyledCarouselInnerContainer>`
   width: 100%;
   overflow: hidden;
   position: relative;
   margin: auto;
   display: flex;
   align-items: center;
+
+  @media screen and (max-width: 1024px) {
+    ${(props) => getInnerContainerResponsiveStyle(props.type)}
+  }
 `;
 
 const SlideContainer = styled.div<StyledSlideContainer>`
@@ -53,6 +216,10 @@ const SlideContainer = styled.div<StyledSlideContainer>`
   position: relative;
   z-index: 0;
 
+  @media screen and (max-width: 1024px) {
+    ${(props) => getWidthPercentage(props.type)};
+  }
+
   > div {
     ${(props) => slidesPerViewWidth(props.slidesPerView, props.slidesCount)};
     margin: 0 ${SLIDE_MARGIN}px 0 0;
@@ -61,14 +228,34 @@ const SlideContainer = styled.div<StyledSlideContainer>`
   }
 `;
 
-const useCarousel = (
-  slidesCount: number,
-  slidesPerView: number,
-  responsiveSlidesPerView: number,
-  autoplay: boolean = false
-) => {
+const ButtonContainer = styled.div<StyledButtonContainer>`
+  ${(props) => getNavPosition(props.navPosition)};
+`;
+
+const CarouselBottomBanner: React.FC<CarouselProps> = ({
+  type = "default",
+  slidesPerView,
+  navPosition,
+  paginationType,
+  autoplay = false,
+  buttonBackgroundColor = "transparent",
+  buttonIconColor = "black",
+  children,
+}) => {
+  const slidesCount = Children.count(children);
+
+  // responsiveSlidesPerView
+  const defaultSlidesPerView = 2;
+  const popularSlidesPerView = 1;
+  const bannerSlidesPerView = 1;
+
   const { innerWidth } = useWindowDimensions();
-  if (innerWidth <= 1024) slidesPerView = responsiveSlidesPerView;
+  if (innerWidth <= 1024 && type === "default")
+    slidesPerView = defaultSlidesPerView;
+  if (innerWidth <= 1024 && type === "popular")
+    slidesPerView = popularSlidesPerView;
+  if (innerWidth <= 1024 && type === "banner")
+    slidesPerView = bannerSlidesPerView;
 
   // swipe effect
   const [slideIndex, setSlideIndex] = useState(0);
@@ -107,7 +294,6 @@ const useCarousel = (
 
   // click event
   const onClickLeft = (event: React.MouseEvent<HTMLElement>) => {
-    console.log(slideIndex);
     if (autoplay) {
       setSlideIndex(slideIndex - 1);
       if (slideIndex <= 0) {
@@ -273,68 +459,36 @@ const useCarousel = (
   };
 
   // pagination
+  let paginationActive: boolean;
+  if (paginationType) paginationActive = true;
+  else paginationActive = false;
+
   const onClickPaginationHandler = (index: number) => {
     setSlideIndex(index);
   };
 
-  // 변경중
-  const LeftButton: React.FC<{
-    buttonIconColor: string;
-    buttonBackgroundColor: "black" | "white" | "transparent";
-    className: string;
-  }> = ({ buttonIconColor, buttonBackgroundColor, className }) => {
-    return (
-      <IconButton
-        className={className}
-        iconName="ChevronLeft"
-        fillColor={buttonIconColor}
-        backgroundColor={buttonBackgroundColor}
-        onClick={onClickLeft}
-        disabled={leftButtonDisabled()}
-      />
-    );
-  };
-
-  const RightButton: React.FC<{
-    buttonIconColor: string;
-    buttonBackgroundColor: "black" | "white" | "transparent";
-    className: string;
-  }> = ({ buttonIconColor, buttonBackgroundColor, className }) => {
-    return (
-      <IconButton
-        className={className}
-        iconName="ChevronRight"
-        fillColor={buttonIconColor}
-        backgroundColor={buttonBackgroundColor}
-        onClick={onClickRight}
-        disabled={rightButtonDisabled()}
-      />
-    );
-  };
-
-  const ProgressBar = () => {};
-
-  const PaginationProp: React.FC<{
-    paginationType: "circle";
-    className: string;
-  }> = ({ paginationType, className }) => {
-    return (
-      <Pagination
-        className={className}
-        paginationType={paginationType}
-        slidesPerView={slidesPerView}
-        pageIndex={slideIndex}
-        childrenCount={slidesCount}
-        onClickPaginationHandler={onClickPaginationHandler}
-      />
-    );
-  };
-
-  const CarouselContainer: React.FC<CarouselProps> = ({
-    className,
-    children,
-  }) => {
-    return (
+  return (
+    <CarouselOuterContainer navPosition={navPosition} type={type}>
+      {navPosition === "eachSide" && (
+        <IconButton
+          className="leftButton"
+          iconName="ChevronLeft"
+          fillColor={buttonIconColor}
+          backgroundColor={buttonBackgroundColor}
+          onClick={onClickLeft}
+          disabled={leftButtonDisabled()}
+        />
+      )}
+      {navPosition === "eachSide" && (
+        <IconButton
+          className="rightButton"
+          iconName="ChevronRight"
+          fillColor={buttonIconColor}
+          backgroundColor={buttonBackgroundColor}
+          onClick={onClickRight}
+          disabled={rightButtonDisabled()}
+        />
+      )}
       <CarouselInnerContainer
         onMouseDown={handleMouseDown}
         onMouseLeave={handleMouseLeave}
@@ -344,26 +498,48 @@ const useCarousel = (
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
         onClick={handleClick}
-        className={className}
+        type={type}
       >
         <SlideContainer
           slidesPerView={slidesPerView}
           slidesCount={slidesCount}
           ref={slideRef}
+          type={type}
         >
           {children}
         </SlideContainer>
+        {navPosition !== "eachSide" && (
+          <ButtonContainer navPosition={navPosition}>
+            <IconButton
+              className="leftButton"
+              iconName="ChevronLeft"
+              fillColor={buttonIconColor}
+              backgroundColor={buttonBackgroundColor}
+              onClick={onClickLeft}
+              disabled={leftButtonDisabled()}
+            />
+            <IconButton
+              className="rightButton"
+              iconName="ChevronRight"
+              fillColor={buttonIconColor}
+              backgroundColor={buttonBackgroundColor}
+              onClick={onClickRight}
+              disabled={rightButtonDisabled()}
+            />
+          </ButtonContainer>
+        )}
       </CarouselInnerContainer>
-    );
-  };
-
-  return {
-    LeftButton,
-    RightButton,
-    ProgressBar,
-    PaginationProp,
-    CarouselContainer,
-  };
+      {paginationActive && (
+        <Pagination
+          className="circle"
+          paginationType={paginationType}
+          slidesPerView={slidesPerView}
+          pageIndex={slideIndex}
+          childrenCount={slidesCount}
+          onClickPaginationHandler={onClickPaginationHandler}
+        />
+      )}
+    </CarouselOuterContainer>
+  );
 };
-
-export default useCarousel;
+export default CarouselBottomBanner;
