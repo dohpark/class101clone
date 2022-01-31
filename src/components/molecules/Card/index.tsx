@@ -140,21 +140,32 @@ const ImageContainer = styled.div`
   border-radius: 3px;
 
   .couponBadge {
-    top: 3%;
-    left: 3%;
+    top: 12px;
+    left: 12px;
     position: absolute;
     z-index: 1;
-    width: 60px;
     border-radius: 3px;
-    padding: 8px;
+    padding: 6px 8px;
     text-align: center;
+
+    @media screen and (max-width: 1024px) {
+      top: 10px;
+      left: 10px;
+      font-size: 9px;
+      font-weight: 600;
+      padding: 6px 8px;
+    }
   }
   .likeIcon {
-    top: 2%;
-    right: 2%;
+    top: 4px;
+    right: 8px;
     position: absolute;
     z-index: 1;
     border-radius: 50%;
+
+    @media screen and (max-width: 1024px) {
+      top: 1px;
+    }
   }
 `;
 

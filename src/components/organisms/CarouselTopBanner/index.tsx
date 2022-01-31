@@ -87,13 +87,21 @@ const ImageContainer = styled.div`
   position: relative;
 
   .badge {
+    top: 12px;
+    left: 12px;
     position: absolute;
-    top: 3%;
-    left: 3%;
     z-index: 1;
     border-radius: 3px;
-    padding: 8px;
+    padding: 6px 8px;
     text-align: center;
+
+    @media screen and (max-width: 1024px) {
+      top: 10px;
+      left: 10px;
+      font-size: 9px;
+      font-weight: 600;
+      padding: 6px 8px;
+    }
   }
 `;
 
