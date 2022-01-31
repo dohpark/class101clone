@@ -53,7 +53,7 @@ const Title = styled.h2`
 
 const SubTitle = styled.p`
   font-size: 14px;
-  margin-top: 4px;
+  margin-top: 12px;
   margin-bottom: 0px;
   color: ${palette.gray600};
 `;

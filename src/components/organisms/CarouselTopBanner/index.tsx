@@ -115,6 +115,7 @@ const TextWrapper = styled.div`
   justify-content: space-between;
 
   @media screen and (max-width: 640px) {
+    width: 100%;
     margin: 0;
     padding: 0;
   }
@@ -125,28 +126,26 @@ const TextWrapper = styled.div`
   }
 
   .title {
-    display: flex;
-    max-width: 380px;
-    align-items: center;
+    padding-top: 40px;
     font-size: 34px;
     font-weight: bold;
     color: ${palette.white};
     overflow: hidden;
     text-overflow: ellipsis;
+    line-height: 40px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     word-break: keep-all;
 
     @media screen and (max-width: 640px) {
+      padding-top: 0;
       margin-top: 26px;
     }
 
     @media screen and (max-width: 1024px) {
       font-size: 26px;
       line-height: 34px;
-      max-width: 300px;
-      min-width: 270px;
       margin-bottom: 0;
     }
   }
@@ -156,7 +155,7 @@ const TextWrapper = styled.div`
     height: 40px;
     color: ${palette.gray100};
     font-weight: 500;
-    max-width: 300px;
+    line-height: 20px;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
@@ -166,11 +165,7 @@ const TextWrapper = styled.div`
 
     @media screen and (max-width: 1024px) {
       font-size: 14px;
-      max-width: 300px;
-      min-width: 220px;
-      line-height: 20px;
       font-weight: 400;
-      color: ${palette.gray400};
     }
   }
 `;
@@ -225,7 +220,7 @@ const CarouselTopBanner: React.FC<BannerProps> = ({ array }) => {
     slideIndex,
     PaginationProp,
     ProgressBarProp,
-  } = useCarousel(array.length, 1, 1, true);
+  } = useCarousel(array.length, 1, 1, false);
 
   // title subtitle
   let title: string;

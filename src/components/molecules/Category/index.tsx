@@ -68,7 +68,7 @@ const SubCategoryUL = styled.ul`
   height: 740px;
   display: none;
   left: 210px;
-  top: -17px;
+  top: -1px;
 `;
 
 const Category: React.FC<CategoryProps> = ({ className }) => {

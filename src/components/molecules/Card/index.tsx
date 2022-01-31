@@ -45,8 +45,8 @@ const getDTime = () => {
   let minute = localTime.getMinutes();
   let second = localTime.getSeconds();
 
-  const now = new Date(`1997-3-10 ${hour}:${minute}:${second}`);
-  const dTime = new Date(`1997-3-11 00:00:00`);
+  const now = new Date(`1997/3/10 ${hour}:${minute}:${second}`);
+  const dTime = new Date(`1997/3/11 00:00:00`);
 
   const timeGap = dTime.valueOf() - now.valueOf();
   let dHour = Math.floor(
@@ -76,8 +76,8 @@ const countDDay = (DDay: string) => {
     localTime.getDate(),
   ];
 
-  const today: Date = new Date(`${year}-${month}-${date}`);
-  const dDay: Date = new Date(`${+Dyear}-${+Dmonth}-${+Ddate}`);
+  const today: Date = new Date(`${year}/${month}/${date}`);
+  const dDay: Date = new Date(`${+Dyear}/${+Dmonth}/${+Ddate}`);
 
   return (dDay.valueOf() - today.valueOf()) / (24 * 60 * 60 * 1000);
 };
@@ -106,6 +106,7 @@ const getTitleCSS = (type: CardType) => {
         overflow: hidden;
         text-overflow: ellipsis;
         display: -webkit-box;
+        line-height: 20px;
         -webkit-line-clamp: 1;
         -webkit-box-orient: vertical;
         word-break: keep-all;
@@ -207,7 +208,7 @@ const TextCreator = styled.div`
   font-weight: 700;
   font-size: 0.8rem;
   line-height: 0.875rem;
-  margin: 5px 0px;
+  margin: 8px 0px 5px;
 `;
 
 const TextTitle = styled.div<StyledTextTitle>`

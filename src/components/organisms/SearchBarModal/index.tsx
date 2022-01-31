@@ -143,6 +143,7 @@ const RecentSearchTerm = styled.div`
 
 const SearchTitle = styled.h3`
   font-size: 14px;
+  margin: 14px 0;
   display: flex;
   align-items: center;
   font-weight: bold;

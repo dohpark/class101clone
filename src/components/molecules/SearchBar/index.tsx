@@ -14,15 +14,12 @@ interface SearchBarProps {
 // styled-components
 const SearchBarForm = styled.form`
   width: 100%;
-  position: relative;
+  display: flex;
+  align-items: center;
 
   .searchIcon {
-    position: absolute;
-    right: 2%;
-
-    @media screen and (max-width: 1024px) {
-      top: -5px;
-    }
+    position: relative;
+    right: 50px;
   }
 `;
 
