@@ -220,7 +220,7 @@ const CarouselTopBanner: React.FC<BannerProps> = ({ array }) => {
     slideIndex,
     PaginationProp,
     ProgressBarProp,
-  } = useCarousel(array.length, 1, 1, false);
+  } = useCarousel(array.length, 1, 1, true);
 
   // title subtitle
   let title: string;
