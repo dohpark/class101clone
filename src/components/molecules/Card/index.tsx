@@ -73,13 +73,13 @@ const countDDay = (DDay: string) => {
   const [year, month, date] = [
     localTime.getFullYear(),
     localTime.getMonth() + 1,
-    localTime.getDate() + 1,
+    localTime.getDate(),
   ];
 
-  const today: any = new Date(`${year}-${month}-${date}`);
-  const dDay: any = new Date(`${+Dyear}-${+Dmonth}-${+Ddate}`);
+  const today: Date = new Date(`${year}-${month}-${date}`);
+  const dDay: Date = new Date(`${+Dyear}-${+Dmonth}-${+Ddate}`);
 
-  return (dDay - today) / (24 * 60 * 60 * 1000);
+  return (dDay.valueOf() - today.valueOf()) / (24 * 60 * 60 * 1000);
 };
 
 const getDateAndDay = (yearMonthDate: string) => {

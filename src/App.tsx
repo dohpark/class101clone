@@ -13,9 +13,9 @@ import Header from "./components/organisms/Header";
 import Nav from "./components/organisms/Nav";
 import Banner from "./components/molecules/Banner";
 import BottomNav from "./components/organisms/BottomNav";
-import CarouselBanner from "./components/organisms/CarouselBanner";
+import CarouselBottomBanner from "./components/organisms/CarouselBottomBanner";
 import CarouselCard from "./components/organisms/CarouselCard";
-import TopBanner from "./components/organisms/TopBanner";
+import CarouselTopBanner from "./components/organisms/CarouselTopBanner";
 
 const HomePage = styled.div``;
 
@@ -28,7 +28,7 @@ function App() {
     <HomePage>
       <Header />
       <Nav />
-      <TopBanner array={topEvent.top_event} />
+      <CarouselTopBanner array={topEvent.top_event} />
       <Section title={"오늘의 특가! TIME DEAL"} button={true}>
         <CarouselCard slidesPerView={4} mobileSlidesPerView={2}>
           {timeDeal.time_deal.map(
@@ -68,7 +68,7 @@ function App() {
         </CarouselCard>
       </Section>
       <BannerContainer>
-        <CarouselBanner slidesPerView={1} mobileSlidesPerView={1}>
+        <CarouselBottomBanner slidesPerView={1} mobileSlidesPerView={1}>
           {bottomEvent.bottom_event.map(
             ({ id, title, subtitle, img, bgColor }) => (
               <Banner
@@ -80,7 +80,7 @@ function App() {
               />
             )
           )}
-        </CarouselBanner>
+        </CarouselBottomBanner>
       </BannerContainer>
       <Section
         title={"오픈 예정 클래스"}

@@ -17,7 +17,7 @@ interface CarouselProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
 }
 
-// const
+// 상수
 const SLIDE_MARGIN = 15;
 
 // prop function
@@ -85,6 +85,11 @@ const useCarousel = (
   } else if (slideIndex > slidesCount - 1) {
     setSlideIndex(0);
   }
+
+  // 첫 렌더링
+  useEffect(() => {
+    resetAnimation();
+  }, []);
 
   // 화면 크기 변화 및 반응형 대응
   useEffect(() => {
@@ -290,7 +295,7 @@ const useCarousel = (
     setSlideIndex(index);
   };
 
-  // 변경중
+  // props
   const LeftButton: React.FC<{
     buttonIconColor: string;
     buttonBackgroundColor: "black" | "white" | "transparent";
