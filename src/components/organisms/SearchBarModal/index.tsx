@@ -7,6 +7,7 @@ import SearchBar from "../../molecules/SearchBar";
 import { recommendSearch, popularSearchTerm } from "../../../data/data";
 import TextButton from "../../atoms/TextButton";
 import IconButton from "../../atoms/IconButton";
+import useWindowDimensions from "../../../hooks/useWindowDimensions";
 
 // type
 interface SearchBarModalProps {
@@ -279,12 +280,23 @@ const SearchBarModal: React.FC<SearchBarModalProps> = ({ closeModal }) => {
   const firstToFifth = popularSearchTerm.popular_search_term.slice(0, 5);
   const sixthToTenth = popularSearchTerm.popular_search_term.slice(5);
 
+  // placeholder text
+  const { innerWidth } = useWindowDimensions();
+  let placeholderText: string;
+  if (innerWidth <= 1240) placeholderText = "검색어 입력";
+  else placeholderText = "찾으시는 취미가 있으신가요?";
+
+  useEffect(() => {
+    if (innerWidth <= 1240) placeholderText = "검색어 입력";
+    else placeholderText = "찾으시는 취미가 있으신가요?";
+  }, []);
+
   return (
     <SearchModalContainer>
       <HeaderWrapper>
         <LogoWrapper>CLASS102</LogoWrapper>
         <SearchBarWrapper>
-          <SearchBar placeholder="찾으시는 취미가 있으신가요?" modal={false} />
+          <SearchBar placeholder={placeholderText} modal={false} />
           <Button className="closeModal" onClick={closeModal}>
             취소
           </Button>

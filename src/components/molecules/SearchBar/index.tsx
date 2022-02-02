@@ -19,7 +19,7 @@ const SearchBarForm = styled.form`
 
   .searchIcon {
     position: relative;
-    right: 50px;
+    right: 45px;
   }
 `;
 

@@ -3,7 +3,7 @@ import Button from "../../atoms/Button";
 import palette from "../../../styles/palette";
 import SearchBar from "../../molecules/SearchBar";
 import useWindowDimensions from "../../../hooks/useWindowDimensions";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 // styled-components
 const HeaderContainer = styled.header`
@@ -138,13 +138,15 @@ const ButtonWrapper = styled.div`
 `;
 
 const Header = () => {
-  const [smallSearchBar, setSmallSearchBar] = useState(false);
   const { innerWidth } = useWindowDimensions();
+  let placeholderText: string;
+  if (innerWidth <= 1240) placeholderText = "검색어 입력";
+  else placeholderText = "찾으시는 취미가 있으신가요?";
 
   useEffect(() => {
-    if (innerWidth <= 1240) setSmallSearchBar(true);
-    else setSmallSearchBar(false);
-  }, [innerWidth]);
+    if (innerWidth <= 1240) placeholderText = "검색어 입력";
+    else placeholderText = "찾으시는 취미가 있으신가요?";
+  }, []);
 
   return (
     <HeaderContainer>
@@ -156,12 +158,7 @@ const Header = () => {
         <Button className="store">스토어</Button>
       </ClassStoreWrapper>
       <SearchWrapper>
-        {smallSearchBar && (
-          <SearchBar placeholder={"검색어 입력"} modal={true} />
-        )}
-        {!smallSearchBar && (
-          <SearchBar placeholder={"찾으시는 취미가 있으신가요?"} modal={true} />
-        )}
+        <SearchBar placeholder={placeholderText} modal={true} />
       </SearchWrapper>
       <ButtonWrapper>
         <div className="buttons">
