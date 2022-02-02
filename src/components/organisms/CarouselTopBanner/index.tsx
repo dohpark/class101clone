@@ -72,13 +72,15 @@ const BannerWrapper = styled.div`
   .imageCarouselContainer {
     width: 58%;
     position: relative;
-    top: 20px;
+    top: 32px;
+    border-radius: 8px;
     overflow: hidden;
 
     @media screen and (max-width: 640px) {
       flex-direction: column-reverse;
       overflow: visible;
       width: calc(100% - 48px);
+      border-radius: 8px;
     }
   }
 `;
@@ -132,6 +134,7 @@ const TextWrapper = styled.div`
     color: ${palette.white};
     overflow: hidden;
     text-overflow: ellipsis;
+    max-width: 380px;
     line-height: 40px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -141,18 +144,21 @@ const TextWrapper = styled.div`
     @media screen and (max-width: 640px) {
       padding-top: 0;
       margin-top: 26px;
+      max-width: 300px;
     }
 
     @media screen and (max-width: 1024px) {
       font-size: 26px;
       line-height: 34px;
       margin-bottom: 0;
+      max-width: 240px;
     }
   }
 
   .subtitle {
     margin: 10px 0 0;
     height: 40px;
+    max-width: 300px;
     color: ${palette.gray100};
     font-weight: 500;
     line-height: 20px;

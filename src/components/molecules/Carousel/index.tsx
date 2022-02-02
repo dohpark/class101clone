@@ -124,7 +124,6 @@ const useCarousel = (
 
   // click event
   const onClickLeft = (event: React.MouseEvent<HTMLElement>) => {
-    console.log(slideIndex);
     if (autoplay) {
       setSlideIndex(slideIndex - 1);
       if (slideIndex <= 0) {

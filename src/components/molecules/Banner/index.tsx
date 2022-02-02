@@ -65,6 +65,7 @@ const ImageContainer = styled.div`
   bottom: -1px;
   display: block;
   height: 244px;
+  max-width: 395px;
   z-index: 0;
 `;
 

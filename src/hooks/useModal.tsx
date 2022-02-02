@@ -39,7 +39,7 @@ const useModal = () => {
 
   const closeModal = () => {
     setModalOpen(false);
-    document.body.setAttribute("style", "margin: 0");
+    document.body.setAttribute("style", "");
     window.scrollTo(0, windowOffsetY);
   };
 
