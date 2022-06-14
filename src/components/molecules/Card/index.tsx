@@ -321,7 +321,7 @@ const Card: React.FC<CardProps> = ({
     dDay = countDDay(cheer.finishDate);
     if (dDay > 0) cheerDDay = `${dDay}일 남음`;
     else if (dDay === 0) cheerDDay = "오늘!!";
-    else cheerDDay = `이미 지났어요ㅠ +${dDay}`;
+    else cheerDDay = `응원 종료!`;
   } else {
     cheerRate = null;
     cheerDDay = null;
